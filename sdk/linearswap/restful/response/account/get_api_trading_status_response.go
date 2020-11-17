@@ -1,49 +1,49 @@
 ﻿package account
 
 type GetApiTradingStatusResponse struct {
-	status string
+	Status string `json:"status"`
 
-	errorCode string `json:"err_code,omitempty"`
+	ErrorCode int `json:"err_code,omitempty"`
 
-	errorMessage string `json:"err_msg,omitempty"`
+	ErrorMessage string `json:"err_msg,omitempty"`
 
-	ts int64
+	Ts int64 `json:"ts"`
 
-	data struct {
-		isDisable int `json:"is_disable"`
+	Data struct {
+		IsDisable int `json:"is_disable"`
 
-		orderPriceTypes string `json:"order_price_types"`
+		OrderPriceTypes string `json:"order_price_types"`
 
-		disableReason string `json:"disable_reason"`
+		DisableReason string `json:"disable_reason"`
 
-		disableInterval int64 `json:"disable_interval"`
+		DisableInterval int64 `json:"disable_interval"`
 
-		recoveryTime int64 `json:"recovery_time"`
+		RecoveryTime int64 `json:"recovery_time"`
 
 		COR struct {
-			ordersThreshold int64 `json:"orders_threshold"`
+			OrdersThreshold int64 `json:"orders_threshold"`
 
-			orders int64
+			Orders int64 `json:"orders"`
 
-			invalidCancelOrders int64 `json:"invalid_cancel_orders"`
+			InvalidCancelOrders int64 `json:"invalid_cancel_orders"`
 
-			cancelRatioThreshold float32 `json:"cancel_ratio_threshold"`
+			CancelRatioThreshold float32 `json:"cancel_ratio_threshold"`
 
-			cancelRatio float32 `json:"cancel_ratio"`
+			CancelRatio float32 `json:"cancel_ratio"`
 
-			isTrigger int `json:"cancel_ratio"`
+			IsTrigger int `json:"is_trigger"`
 
-			isActive int `json:"is_active"`
+			IsActive int `json:"is_active"`
 		}
 
 		TDN struct {
-			disablesThreshold int64 `json:"disables_threshold"`
+			DisablesThreshold int64 `json:"disables_threshold"`
 
-			disables int64
+			Disables int64 `json:"disables"`
 
-			isTrigger int `json:"is_trigger"`
+			IsTrigger int `json:"is_trigger"`
 
-			isActive int `json:"is_active"`
+			IsActive int `json:"is_active"`
 		}
-	} `json:"omitempty"`
+	} `json:"data,omitempty"`
 }

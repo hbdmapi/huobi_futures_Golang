@@ -1,15 +1,15 @@
 ﻿package account
 
 type AccountTransferResponse struct {
-	status string
+	Status string `json:"status"`
 
-	errorCode string `json:"err_code,omitempty"`
+	ErrorCode int `json:"err_code,omitempty"`
 
-	errorMessage string `json:"err_msg,omitempty"`
+	ErrorMessage string `json:"err_msg,omitempty"`
 
-	data struct {
-		orderId string `json:"order_id"`
-	} `json:"omitempty"`
+	Data struct {
+		OrderId string `json:"order_id"`
+	} `json:"data,omitempty"`
 
-	ts int64
+	Ts int64 `json:"ts"`
 }

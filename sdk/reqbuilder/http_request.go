@@ -1,11 +1,10 @@
 package reqbuilder
 
 import (
+	"huobi_futures_Golang/sdk/log"
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/hbdmapi/huobi_futures_Golang/sdk/sdk/log"
 )
 
 func HttpGet(url string) (string, error) {

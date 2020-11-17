@@ -1,51 +1,51 @@
 ﻿package account
 
 type GetAccountTransHisResponse struct {
-	status string
+	Status string `json:"status"`
 
-	errorCode string `json:"err_code,omitempty"`
+	ErrorCode int `json:"err_code,omitempty"`
 
-	errorMessage string `json:"err_msg,omitempty"`
+	ErrorMessage string `json:"err_msg,omitempty"`
 
-	data []struct {
-		financialRecord []struct {
-			id int64
+	Data struct {
+		FinancialRecord []struct {
+			Id int64 `json:"id"`
 
-			ts int64
+			Ts int64 `json:"ts"`
 
-			asset string
+			Asset string `json:"asset"`
 
-			contractCode string `json:"contract_code"`
+			ContractCode string `json:"contract_code"`
 
-			marginAccount string `json:"margin_account"`
+			MarginAccount string `json:"margin_account"`
 
-			amount float32
+			Amount float32 `json:"amount"`
 
 			// region only for account
-			faceMarginAccount string `json:"face_margin_account,omitempty"`
+			FaceMarginAccount string `json:"face_margin_account,omitempty"`
 
-			fcType int `json:"type,omitempty"`
+			FcType int `json:"type,omitempty"`
 			// endregion
 
 			// region only for sub account
-			fromMarginAccount string `json:"from_margin_account,omitempty"`
+			FromMarginAccount string `json:"from_margin_account,omitempty"`
 
-			toMarginAccount string `json:"to_margin_account,omitempty"`
+			ToMarginAccount string `json:"to_margin_account,omitempty"`
 
-			subUid string `json:"sub_uid,omitempty"`
+			SubUid string `json:"sub_uid,omitempty"`
 
-			subAccountName string `json:"sub_account_name,omitempty"`
+			SubAccountName string `json:"sub_account_name,omitempty"`
 
-			transferType int `json:"transfer_type,omitempty"`
+			TransferType int `json:"transfer_type,omitempty"`
 			// endregion
 		} `json:"financial_record"`
 
-		totalPage int64 `json:"total_page"`
+		TotalPage int `json:"total_page"`
 
-		currentPage int64 `json:"current_page"`
+		CurrentPage int `json:"current_page"`
 
-		totalSize int64 `json:"total_size"`
-	} `json:"omitempty"`
+		TotalSize int `json:"total_size"`
+	} `json:"data,omitempty"`
 
-	ts int64
+	Ts int64 `json:"ts"`
 }

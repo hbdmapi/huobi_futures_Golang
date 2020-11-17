@@ -1,17 +1,17 @@
 ﻿package account
 
 type GetValidLeverRateResponse struct {
-	status string
+	Status string `json:"status"`
 
-	errorCode string `json:"err_code,omitempty"`
+	ErrorCode int `json:"err_code,omitempty"`
 
-	errorMessage string `json:"err_msg,omitempty"`
+	ErrorMessage string `json:"err_msg,omitempty"`
 
-	data []struct {
-		contractCode string `json:"contract_code"`
+	Data []struct {
+		ContractCode string `json:"contract_code"`
 
-		availableLeverRate string `json:"available_level_rate"`
-	} `json:"omitempty"`
+		AvailableLeverRate string `json:"available_level_rate"`
+	} `json:"data,omitempty"`
 
-	ts int64
+	Ts int64 `json:"ts"`
 }

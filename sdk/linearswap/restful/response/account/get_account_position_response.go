@@ -1,43 +1,43 @@
 ﻿package account
 
 type GetAccountPositionResponse struct {
-	status string
+	Status string `json:"status"`
 
-	errorCode string `json:"err_code,omitempty"`
+	ErrorCode int `json:"err_code,omitempty"`
 
-	errorMessage string `json:"err_msg,omitempty"`
+	ErrorMessage string `json:"err_msg,omitempty"`
 
-	data []struct {
-		symbol string
+	Data []struct {
+		Symbol string `json:"symbol"`
 
-		contractCode string `json:"contract_code"`
+		ContractCode string `json:"contract_code"`
 
-		volume float32
+		Volume float32 `json:"volume"`
 
-		available float32
+		Available float32 `json:"available"`
 
-		frozen float32
+		Frozen float32 `json:"frozen"`
 
-		costOpen float32 `json:"cost_open"`
+		CostOpen float32 `json:"cost_open"`
 
-		costHold float32 `json:"cost_hold"`
+		CostHold float32 `json:"cost_hold"`
 
-		profitUnreal float32 `json:"profit_unreal"`
+		ProfitUnreal float32 `json:"profit_unreal"`
 
-		profitRate float32 `json:"profit_rate"`
+		ProfitRate float32 `json:"profit_rate"`
 
-		profit float32
+		Profit float32 `json:"profit"`
 
-		marginAsset string `json:"margin_asset"`
+		MarginAsset string `json:"margin_asset"`
 
-		positionMargin float32 `json:"position_margin"`
+		PositionMargin float32 `json:"position_margin"`
 
-		leverRate int `json:"lever_rate"`
+		LeverRate int `json:"lever_rate"`
 
-		direction string
+		Direction string `json:"direction"`
 
-		lastPrice float32 `json:"last_price"`
-	} `json:"omitempty"`
+		LastPrice float32 `json:"last_price"`
+	} `json:"data,omitempty"`
 
-	ts int64
+	Ts int64 `json:"ts"`
 }

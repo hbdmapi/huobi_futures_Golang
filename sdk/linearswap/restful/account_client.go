@@ -3,11 +3,10 @@
 import (
 	"encoding/json"
 	"fmt"
-
-	"github.com/hbdmapi/huobi_futures_Golang/sdk/sdk/linearswap"
-	"github.com/hbdmapi/huobi_futures_Golang/sdk/sdk/linearswap/restful/response/account"
-	"github.com/hbdmapi/huobi_futures_Golang/sdk/sdk/log"
-	"github.com/hbdmapi/huobi_futures_Golang/sdk/sdk/reqbuilder"
+	"huobi_futures_Golang/sdk/linearswap"
+	"huobi_futures_Golang/sdk/linearswap/restful/response/account"
+	"huobi_futures_Golang/sdk/log"
+	"huobi_futures_Golang/sdk/reqbuilder"
 )
 
 type AccountClient struct {
@@ -66,7 +65,7 @@ func (ac *AccountClient) GetAccountPositionAsync(data chan account.GetAccountPos
 		content = fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
 	}
 	if subUid != 0 {
-		content += ",\"sub_uid\": {subUid}"
+		content += fmt.Sprintf(",\"sub_uid\": %d", subUid)
 	}
 	if content != "" {
 		content = fmt.Sprintf("{%s}", content[1:])
@@ -137,8 +136,8 @@ func (ac *AccountClient) AccountTransferAsync(data chan account.AccountTransferR
 	data <- result
 }
 
-func (ac *AccountClient) GetAccountTransHisAsync(data chan account.GetAccountTransHisResponse, marginAccount string, beMasterSub bool, fcType string, createDate int,
-	pageIndex int, pageSize int) {
+func (ac *AccountClient) GetAccountTransHisAsync(data chan account.GetAccountTransHisResponse, marginAccount string,
+	beMasterSub bool, fcType string, createDate int, pageIndex int, pageSize int) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_financial_record", nil)
 	if beMasterSub {
@@ -230,7 +229,7 @@ func (ac *AccountClient) GetFeeAsync(data chan account.GetFeeResponse, contractC
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_fee", nil)
 
 	// content
-	content := fmt.Sprintf("{{ \"contract_code\": \"%s\" }}", contractCode)
+	content := fmt.Sprintf("{ \"contract_code\": \"%s\" }", contractCode)
 	getResp, getErr := reqbuilder.HttpPost(url, content)
 	if getErr != nil {
 		log.Error("http get error: %s", getErr)

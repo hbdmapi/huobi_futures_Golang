@@ -1,21 +1,21 @@
 ﻿package account
 
 type GetPositionLimitResponse struct {
-	status string
+	Status string `json:"status"`
 
-	errorCode string `json:"err_code,omitempty"`
+	ErrorCode int `json:"err_code,omitempty"`
 
-	errorMessage string `json:"err_msg,omitempty"`
+	ErrorMessage string `json:"err_msg,omitempty"`
 
-	data []struct {
-		symbol string
+	Data []struct {
+		Symbol string `json:"symbol"`
 
-		contractCode string `json:"contract_code"`
+		ContractCode string `json:"contract_code"`
 
-		buyLimit float32 `json:"buy_limit"`
+		BuyLimit float32 `json:"buy_limit"`
 
-		sellLimit float32 `json:"sell_limit"`
-	} `json:"omitempty"`
+		SellLimit float32 `json:"sell_limit"`
+	} `json:"data,omitempty"`
 
-	ts int64
+	Ts int64 `json:"ts"`
 }

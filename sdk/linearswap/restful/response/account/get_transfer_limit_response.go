@@ -1,35 +1,35 @@
 ﻿package account
 
 type GetTransferLimitResponse struct {
-	status string
+	Status string `json:"status"`
 
-	errorCode string `json:"err_code,omitempty"`
+	ErrorCode int `json:"err_code,omitempty"`
 
-	errorMessage string `json:"err_msg,omitempty"`
+	ErrorMessage string `json:"err_msg,omitempty"`
 
-	data []struct {
-		symbol string
+	Data []struct {
+		Symbol string `json:"symbol"`
 
-		contractCode string `json:"contract_code"`
+		ContractCode string `json:"contract_code"`
 
-		openLimit string `json:"open_limit"`
+		OpenLimit string `json:"open_limit"`
 
-		transferInMaxEach float32 `json:"transfer_in_max_each"`
+		TransferInMaxEach float32 `json:"transfer_in_max_each"`
 
-		transferInMinEach float32 `json:"transfer_in_min_each"`
+		TransferInMinEach float32 `json:"transfer_in_min_each"`
 
-		transferOutMaxEach float32 `json:"transfer_out_max_each"`
+		TransferOutMaxEach float32 `json:"transfer_out_max_each"`
 
-		transferOutMinEach float32 `json:"transfer_out_min_each"`
+		TransferOutMinEach float32 `json:"transfer_out_min_each"`
 
-		transferInMaxDaily float32 `json:"transfer_in_max_daily"`
+		TransferInMaxDaily float32 `json:"transfer_in_max_daily"`
 
-		transferOutMaxDaily float32 `json:"transfer_out_max_daily"`
+		TransferOutMaxDaily float32 `json:"transfer_out_max_daily"`
 
-		netTransferInMaxDaily float32 `json:"net_transfer_in_max_daily"`
+		NetTransferInMaxDaily float32 `json:"net_transfer_in_max_daily"`
 
-		netTransferOutMaxDaily float32 `json:"net_transfer_out_max_daily"`
-	} `json:"omitempty"`
+		NetTransferOutMaxDaily float32 `json:"net_transfer_out_max_daily"`
+	} `json:"data,omitempty"`
 
-	ts int64
+	Ts int64 `json:"ts"`
 }

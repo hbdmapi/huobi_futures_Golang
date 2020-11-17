@@ -1,25 +1,25 @@
 ﻿package account
 
 type GetOrderLimitResponse struct {
-	status string
+	Status string `json:"status"`
 
-	errorCode string `json:"err_code,omitempty"`
+	ErrorCode int `json:"err_code,omitempty"`
 
-	errorMessage string `json:"err_msg,omitempty"`
+	ErrorMessage string `json:"err_msg,omitempty"`
 
-	data struct {
-		orderPriceType string `json:"order_price_type"`
+	Data struct {
+		OrderPriceType string `json:"order_price_type"`
 
-		list []struct {
-			symbol string
+		List []struct {
+			Symbol string `json:"symbol"`
 
-			contractCode string `json:"contract_code"`
+			ContractCode string `json:"contract_code"`
 
-			openLimit float32 `json:"open_limit"`
+			OpenLimit float32 `json:"open_limit"`
 
-			closeLimit float32 `json:"close_limit"`
-		}
-	} `json:"omitempty"`
+			CloseLimit float32 `json:"close_limit"`
+		} `json:"list"`
+	} `json:"data,omitempty"`
 
-	ts int64
+	Ts int64 `json:"ts"`
 }

@@ -1,27 +1,27 @@
 ﻿package account
 
 type GetFeeResponse struct {
-	status string
+	Status string `json:"status"`
 
-	errorCode string `json:"err_code,omitempty"`
+	ErrorCode int `json:"err_code,omitempty"`
 
-	errorMessage string `json:"err_msg,omitempty"`
+	ErrorMessage string `json:"err_msg,omitempty"`
 
-	data []struct {
-		symbol string
+	Data []struct {
+		Symbol string `json:"symbol"`
 
-		contractCode string `json:"contract_code"`
+		ContractCode string `json:"contract_code"`
 
-		openMakerFee string `json:"open_maker_fee"`
+		OpenMakerFee string `json:"open_maker_fee"`
 
-		openTakerFee string `json:"open_taker_fee"`
+		OpenTakerFee string `json:"open_taker_fee"`
 
-		closeMakerFee string `json:"close_maker_fee"`
+		CloseMakerFee string `json:"close_maker_fee"`
 
-		closeTakerFee string `json:"close_taker_fee"`
+		CloseTakerFee string `json:"close_taker_fee"`
 
-		feeAsset string `json:"fee_asset"`
-	} `json:"omitempty"`
+		FeeAsset string `json:"fee_asset"`
+	} `json:"data,omitempty"`
 
-	ts int64
+	Ts int64 `json:"ts"`
 }
