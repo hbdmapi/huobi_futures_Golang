@@ -47,7 +47,7 @@ func (ac *AccountClient) GetAccountAssetsAsync(data chan account.GetAccountAsset
 	result := account.GetAccountAssetsResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAccountInfoResponse error: %s", getErr)
+		log.Error("convert json to GetAccountAssetsResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -77,7 +77,7 @@ func (ac *AccountClient) GetAccountPositionAsync(data chan account.GetAccountPos
 	result := account.GetAccountPositionResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAccountInfoResponse error: %s", getErr)
+		log.Error("convert json to GetAccountPositionResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -131,7 +131,7 @@ func (ac *AccountClient) AccountTransferAsync(data chan account.AccountTransferR
 	result := account.AccountTransferResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAllSubAssetsResponse error: %s", getErr)
+		log.Error("convert json to AccountTransferResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -177,7 +177,7 @@ func (ac *AccountClient) GetAccountTransHisAsync(data chan account.GetAccountTra
 	result := account.GetAccountTransHisResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAllSubAssetsResponse error: %s", getErr)
+		log.Error("convert json to GetAccountTransHisResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -195,7 +195,7 @@ func (ac *AccountClient) GetValidLeverRateAsync(data chan account.GetValidLeverR
 	result := account.GetValidLeverRateResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAllSubAssetsResponse error: %s", getErr)
+		log.Error("convert json to GetValidLeverRateResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -219,7 +219,7 @@ func (ac *AccountClient) GetOrderLimitAsync(data chan account.GetOrderLimitRespo
 	result := account.GetOrderLimitResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAllSubAssetsResponse error: %s", getErr)
+		log.Error("convert json to GetOrderLimitResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -237,7 +237,7 @@ func (ac *AccountClient) GetFeeAsync(data chan account.GetFeeResponse, contractC
 	result := account.GetFeeResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAllSubAssetsResponse error: %s", getErr)
+		log.Error("convert json to GetFeeResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -261,7 +261,7 @@ func (ac *AccountClient) GetTransferLimitAsync(data chan account.GetTransferLimi
 	result := account.GetTransferLimitResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAllSubAssetsResponse error: %s", getErr)
+		log.Error("convert json to GetTransferLimitResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -285,7 +285,7 @@ func (ac *AccountClient) GetPositionLimitAsync(data chan account.GetPositionLimi
 	result := account.GetPositionLimitResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAllSubAssetsResponse error: %s", getErr)
+		log.Error("convert json to GetPositionLimitResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -302,7 +302,7 @@ func (ac *AccountClient) GetApiTradingStatusAsync(data chan account.GetApiTradin
 	result := account.GetApiTradingStatusResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAllSubAssetsResponse error: %s", getErr)
+		log.Error("convert json to GetApiTradingStatusResponse error: %s", getErr)
 	}
 	data <- result
 }
