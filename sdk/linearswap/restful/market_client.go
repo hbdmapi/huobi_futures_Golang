@@ -15,7 +15,7 @@ type MarketClient struct {
 
 func (mc *MarketClient) Init(host string) *MarketClient {
 	if host == "" {
-		host = linearswap.DEFAULT_HOST
+		host = linearswap.LINEAR_SWAP_DEFAULT_HOST
 	}
 	mc.PUrlBuilder = new(reqbuilder.PublicUrlBuilder).Init(host)
 	return mc
