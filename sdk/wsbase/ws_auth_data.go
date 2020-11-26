@@ -19,12 +19,3 @@ type WSAuthData struct {
 
 	Ticket string `json:"ticket,omitempty"`
 }
-
-func (wsAuthData *WSAuthData) Init() *WSAuthData {
-	wsAuthData.Op = "auth"
-	wsAuthData.AtType = "api"
-	wsAuthData.SignatureMethod = "HmacSHA256"
-	wsAuthData.SignatureVersion = "2"
-
-	return wsAuthData
-}

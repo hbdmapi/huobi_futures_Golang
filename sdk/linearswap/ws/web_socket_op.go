@@ -66,6 +66,7 @@ func (wsOp *WebSocketOp) open(path string, host string, accessKey string, secret
 
 func (wsOp *WebSocketOp) close() {
 	wsOp.conn.Close()
+	wsOp.conn = nil
 }
 
 func (wsOp *WebSocketOp) connServer() bool {
@@ -119,12 +120,16 @@ func (wsOp *WebSocketOp) sendAuth(conn *websocket.Conn, host string, path string
 	sign := new(reqbuilder.Signer).Init(secretKey)
 	signature := sign.Sign("GET", host, path, req.BuildParams())
 
-	auth := new(wsbase.WSAuthData).Init()
-	auth.AccessKeyId = accessKey
-	auth.Timestamp = timestamp
-	auth.Signature = signature
+	auth := wsbase.WSAuthData{
+		Op:               "auth",
+		AtType:           "api",
+		AccessKeyId:      accessKey,
+		SignatureMethod:  "HmacSHA256",
+		SignatureVersion: "2",
+		Timestamp:        timestamp,
+		Signature:        signature}
 
-	jdata, error := json.Marshal(auth)
+	jdata, error := json.Marshal(&auth)
 	if error != nil {
 		log.Error("Auth to json error.")
 		return false
@@ -170,9 +175,9 @@ func (wsOp *WebSocketOp) readLoop(conn *websocket.Conn) {
 			switch op {
 			case "ping": // order heartbeat
 				ts := jdata["ts"]
-				//log.Info("WebSocket received data, { \"op\":\"%s\", \"ts\": %d }", op, ts)
+				//log.Info("WebSocket received data, { \"op\":\"%s\", \"ts\": \"%s\" }", op, ts)
 
-				pongData := fmt.Sprintf("{ \"op\":\"pong\", \"ts\":%d }", ts)
+				pongData := fmt.Sprintf("{ \"op\":\"pong\", \"ts\": \"%s\" }", ts)
 				wsOp.conn.WriteMessage(websocket.TextMessage, []byte(pongData))
 
 				//log.Info("WebSocket replied data, %s", pongData)
@@ -184,7 +189,7 @@ func (wsOp *WebSocketOp) readLoop(conn *websocket.Conn) {
 				log.Error("Illegal op or internal error, but websoket is still connected.")
 
 			case "auth":
-				code := jdata["err-code"]
+				code := int64(jdata["err-code"].(float64))
 				if code == 0 {
 					log.Info("Authentication success.")
 					wsOp.authOk = true
@@ -192,21 +197,22 @@ func (wsOp *WebSocketOp) readLoop(conn *websocket.Conn) {
 						wsOp.conn.WriteMessage(websocket.TextMessage, []byte(e.Value.(string)))
 					}
 				} else {
-					msg := jdata["err-msg"]
+					msg := jdata["err-msg"].(string)
 					log.Error("Authentication failure: %d/%s", code, msg)
+					wsOp.close()
 				}
 			case "notify":
-				topic := jdata["topic"]
-				wsOp.handleSubCallbackFun(topic.(string), message, jdata)
+				topic := jdata["topic"].(string)
+				wsOp.handleSubCallbackFun(topic, message, jdata)
 			case "sub":
-				topic := jdata["sub"]
+				topic := jdata["topic"]
 				log.Info("sub: \"%s\"", topic)
 			case "unsub":
-				topic := jdata["unsub"]
+				topic := jdata["topic"].(string)
 				log.Info("unsub: \"%s\"", topic)
 
-				if _, found := wsOp.onSubCallbackFuns[topic.(string)]; found {
-					delete(wsOp.onSubCallbackFuns, topic.(string))
+				if _, found := wsOp.onSubCallbackFuns[topic]; found {
+					delete(wsOp.onSubCallbackFuns, topic)
 				}
 			default:
 				log.Info("WebSocket received unknow data: %s", jdata)
@@ -223,9 +229,9 @@ func (wsOp *WebSocketOp) readLoop(conn *websocket.Conn) {
 
 			wsOp.handleSubCallbackFun(topic.(string), message, jdata)
 		} else if topic, found := jdata["rep"]; found { // market request reply data
-
 			wsOp.handleReqCallbackFun(topic.(string), message, jdata)
 		} else if code, found := jdata["err-code"]; found { // market request reply data
+			code = code
 			msg := jdata["err-msg"]
 			log.Error("%d:%s", code, msg)
 		} else {
@@ -238,6 +244,17 @@ func (wsOp *WebSocketOp) handleSubCallbackFun(ch string, data string, jdata map[
 	var mi *MethonInfo = nil
 	if _, found := wsOp.onSubCallbackFuns[ch]; found {
 		mi = wsOp.onSubCallbackFuns[ch]
+
+	} else if ch == "accounts" || ch == "positions" {
+		//contract_code := jdata["data"][0]["contract_code"], &contract_code)
+		contract_code := jdata["data"]
+
+		full_ch := fmt.Sprintf("%s.%s", ch, contract_code)
+		if _, found := wsOp.onSubCallbackFuns[full_ch]; found {
+			mi = wsOp.onSubCallbackFuns[full_ch]
+		} else if _, found := wsOp.onSubCallbackFuns[fmt.Sprintf("%s.*", ch)]; found {
+			mi = wsOp.onSubCallbackFuns[fmt.Sprintf("%s.*", ch)]
+		}
 	} else if ch[:7] == "orders." {
 		if _, found := wsOp.onSubCallbackFuns["orders.*"]; found {
 			mi = wsOp.onSubCallbackFuns["orders.*"]
@@ -250,20 +267,10 @@ func (wsOp *WebSocketOp) handleSubCallbackFun(ch string, data string, jdata map[
 		if _, found := wsOp.onSubCallbackFuns["trigger_order.*"]; found {
 			mi = wsOp.onSubCallbackFuns["trigger_order.*"]
 		}
-	} else if ch[len(ch)-18:] == ".liquidation_orders" {
+	} else if ch[len(ch)-19:] == ".liquidation_orders" {
 		if _, found := wsOp.onSubCallbackFuns["public.*.liquidation_orders"]; found {
 
 			mi = wsOp.onSubCallbackFuns["public.*.liquidation_orders"]
-		}
-	} else if ch == "accounts" || ch == "positions" {
-		//contract_code := jdata["data"][0]["contract_code"], &contract_code)
-		contract_code := jdata["data"]
-
-		full_ch := fmt.Sprintf("%s.%s", ch, contract_code)
-		if _, found := wsOp.onSubCallbackFuns[full_ch]; found {
-			mi = wsOp.onSubCallbackFuns[full_ch]
-		} else if _, found := wsOp.onSubCallbackFuns[fmt.Sprintf("%s.*", ch)]; found {
-			mi = wsOp.onSubCallbackFuns[fmt.Sprintf("%s.*", ch)]
 		}
 	}
 
