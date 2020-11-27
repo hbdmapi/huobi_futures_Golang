@@ -10,7 +10,7 @@ import (
 var wsixClient *ws.WSIndexClient
 
 func init() {
-	wsixClient = new(ws.WSIndexClient).Init("")
+	//wsixClient = new(ws.WSIndexClient).Init("")
 }
 
 func TestWSIndexClient_SubPremiumIndexKLine(t *testing.T) {

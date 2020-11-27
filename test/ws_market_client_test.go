@@ -10,7 +10,7 @@ import (
 var wsmkClient *ws.WSMarketClient
 
 func init() {
-	wsmkClient = new(ws.WSMarketClient).Init("api.hbdm.com")
+	//wsmkClient = new(ws.WSMarketClient).Init("api.hbdm.com")
 }
 
 func TestWSMarketClient_SubKLine(t *testing.T) {
