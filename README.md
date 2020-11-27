@@ -1,4 +1,4 @@
-# Huobi Golang SDK
+# Huobi Futures Golang SDK (but only supports linearswap now)
 
 This is Huobi Golang SDK, you can import it to your package.
 
