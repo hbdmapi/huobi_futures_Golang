@@ -25,7 +25,7 @@ The SDK API supports both RESTful and websocket to get/sub the market, account a
 
 ## Quick Start
 
-*The SDK is run and test in go1.15.4, you can import the source code from remote or local what shuold be dowload first.
+The SDK is run and test in go1.15.4, you can import the source code from remote or local what shuold be dowload first.
 
 The package **sdk** is core code source as SDK API.
 The package **test** is a unit test what you can find usage of each API interface in.
