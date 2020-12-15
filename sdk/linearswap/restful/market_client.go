@@ -271,9 +271,35 @@ func (mc *MarketClient) GetInsuranceFundAsync(data chan market.GetInsuranceFundR
 	data <- result
 }
 
-func (mc *MarketClient) GetAdjustFactorFundAsync(data chan market.GetAdjustFactorFundResponse, contractCode string) {
+func (mc *MarketClient) IsolatedGetAdjustFactorFundAsync(data chan market.GetAdjustFactorFundResponse, contractCode string) {
 	// location
 	location := "/linear-swap-api/v1/swap_adjustfactor"
+
+	// option
+	option := ""
+	if contractCode != "" {
+		option += fmt.Sprintf("?contract_code=%s", contractCode)
+	}
+	if option != "" {
+		location += option
+	}
+
+	url := mc.PUrlBuilder.Build(location, nil)
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := market.GetAdjustFactorFundResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetAdjustFactorFundResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (mc *MarketClient) CrossGetAdjustFactorFundAsync(data chan market.GetAdjustFactorFundResponse, contractCode string) {
+	// location
+	location := "/linear-swap-api/v1/swap_cross_adjustfactor"
 
 	// option
 	option := ""
@@ -357,7 +383,7 @@ func (mc *MarketClient) GetElitePositionRatioAsync(data chan market.GetEliteRati
 	data <- result
 }
 
-func (mc *MarketClient) GetApiStatusAsync(data chan market.GetApiStatusResponse, contractCode string) {
+func (mc *MarketClient) IsolatedGetApiStateAsync(data chan market.GetApiStateResponse, contractCode string) {
 	// location
 	location := "/linear-swap-api/v1/swap_api_state"
 
@@ -375,10 +401,59 @@ func (mc *MarketClient) GetApiStatusAsync(data chan market.GetApiStatusResponse,
 	if getErr != nil {
 		log.Error("http get error: %s", getErr)
 	}
-	result := market.GetApiStatusResponse{}
+	result := market.GetApiStateResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetApiStatusResponse error: %s", getErr)
+		log.Error("convert json to GetApiStateResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (mc *MarketClient) CrossGetTransferStateAsync(data chan market.GetTransferStateResponse, marginAccount string) {
+	// location
+	location := "/linear-swap-api/v1/swap_cross_transfer_state"
+
+	// option
+	if marginAccount == "" {
+		marginAccount = "USDT"
+	}
+	location += fmt.Sprintf("?margin_account=%s", marginAccount)
+
+	url := mc.PUrlBuilder.Build(location, nil)
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := market.GetTransferStateResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetTransferStateResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (mc *MarketClient) CrossGetTradeStateAsync(data chan market.GetTradeStateResponse, contractCode string) {
+	// location
+	location := "/linear-swap-api/v1/swap_cross_trade_state"
+
+	// option
+	option := ""
+	if contractCode != "" {
+		option += fmt.Sprintf("?contract_code=%s", contractCode)
+	}
+	if option != "" {
+		location += option
+	}
+
+	url := mc.PUrlBuilder.Build(location, nil)
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := market.GetTradeStateResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetTradeStatusResponse error: %s", getErr)
 	}
 	data <- result
 }

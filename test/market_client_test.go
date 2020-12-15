@@ -211,10 +211,10 @@ func TestMarketClient_GetInsuranceFundAsync(t *testing.T) {
 	}
 }
 
-func TestMarketClient_GetAdjustFactorFundAsync(t *testing.T) {
+func TestMarketClient_IsolatedGetAdjustFactorFundAsync(t *testing.T) {
 	data := make(chan market.GetAdjustFactorFundResponse)
 
-	go mkClient.GetAdjustFactorFundAsync(data, "")
+	go mkClient.IsolatedGetAdjustFactorFundAsync(data, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -223,7 +223,29 @@ func TestMarketClient_GetAdjustFactorFundAsync(t *testing.T) {
 		t.Log(x)
 	}
 
-	go mkClient.GetAdjustFactorFundAsync(data, "BTC-USDT")
+	go mkClient.IsolatedGetAdjustFactorFundAsync(data, "BTC-USDT")
+	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestMarketClient_CrossGetAdjustFactorFundAsync(t *testing.T) {
+	data := make(chan market.GetAdjustFactorFundResponse)
+
+	go mkClient.CrossGetAdjustFactorFundAsync(data, "")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	go mkClient.CrossGetAdjustFactorFundAsync(data, "BTC-USDT")
 	x, ok = <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -281,10 +303,10 @@ func TestMarketClient_GetElitePositionRatioAsync(t *testing.T) {
 	}
 }
 
-func TestMarketClient_GetApiStatusAsync(t *testing.T) {
-	data := make(chan market.GetApiStatusResponse)
+func TestMarketClient_IsolatedGetApiStatusAsync(t *testing.T) {
+	data := make(chan market.GetApiStateResponse)
 
-	go mkClient.GetApiStatusAsync(data, "")
+	go mkClient.IsolatedGetApiStateAsync(data, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -293,7 +315,42 @@ func TestMarketClient_GetApiStatusAsync(t *testing.T) {
 		t.Log(x)
 	}
 
-	go mkClient.GetApiStatusAsync(data, "BTC-USDT")
+	go mkClient.IsolatedGetApiStateAsync(data, "BTC-USDT")
+	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestMarketClient_CrossGetTransferStateAsync(t *testing.T) {
+	data := make(chan market.GetTransferStateResponse)
+
+	go mkClient.CrossGetTransferStateAsync(data, "")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestMarketClient_CrossTradeStateAsync(t *testing.T) {
+	data := make(chan market.GetTradeStateResponse)
+
+	go mkClient.CrossGetTradeStateAsync(data, "")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	go mkClient.CrossGetTradeStateAsync(data, "BTC-USDT")
 	x, ok = <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)

@@ -1,6 +1,6 @@
 ﻿package market
 
-type GetApiStatusResponse struct {
+type GetTransferStateResponse struct {
 	Status string `json:"status"`
 
 	ErrorCode int `json:"err_code,omitempty"`
@@ -8,15 +8,9 @@ type GetApiStatusResponse struct {
 	ErrorMessage string `json:"err_msg,omitempty"`
 
 	Data []struct {
-		Symbol string `json:"symbol"`
+		MarginMode string `json:"margin_mode"`
 
-		ContractCode string `json:"contract_code"`
-
-		Open int `json:"open"`
-
-		Close int `json:"close"`
-
-		Cancel int `json:"cancel"`
+		MarginAccount string `json:"margin_account"`
 
 		TransferIn int `json:"transfer_in"`
 

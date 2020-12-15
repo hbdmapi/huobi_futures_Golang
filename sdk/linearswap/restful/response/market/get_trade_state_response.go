@@ -1,6 +1,6 @@
 ﻿package market
 
-type GetAdjustFactorFundResponse struct {
+type GetTradeStateResponse struct {
 	Status string `json:"status"`
 
 	ErrorCode int `json:"err_code,omitempty"`
@@ -14,19 +14,13 @@ type GetAdjustFactorFundResponse struct {
 
 		MarginMode string `json:"margin_mode"`
 
-		List []struct {
-			LeverRate float32 `json:"lever_rate"`
+		MarginAccount string `json:"margin_account"`
 
-			Ladder []struct {
-				MinSize float32 `json:"min_size"`
+		Open int `json:"open"`
 
-				MaxSize float32 `json:"max_size,omitempty"`
+		Close int `json:"close"`
 
-				Ladder int `json:"ladder"`
-
-				AdjustFactor float32 `json:"adjust_factor"`
-			} `json:"ladders"`
-		} `json:"list"`
+		Cancel int `json:"cancel"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`
