@@ -37,6 +37,10 @@ type GetAccountPositionResponse struct {
 		Direction string `json:"direction"`
 
 		LastPrice float32 `json:"last_price"`
+
+		MarginMode string `json:"margin_mode"`
+
+		MarginAccount string `json:"margin_account"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`

@@ -83,11 +83,41 @@ func (ac *AccountClient) CrossGetAccountInfoAsync(data chan account.GetAccountIn
 	data <- result
 }
 
-func (ac *AccountClient) GetAccountPositionAsync(data chan account.GetAccountPositionResponse, contractCode string, subUid int64) {
+func (ac *AccountClient) IsolatedGetAccountPositionAsync(data chan account.GetAccountPositionResponse, contractCode string, subUid int64) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_position_info", nil)
 	if subUid != 0 {
 		url = ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_info", nil)
+	}
+
+	// content
+	content := ""
+	if contractCode != "" {
+		content = fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
+	}
+	if subUid != 0 {
+		content += fmt.Sprintf(",\"sub_uid\": %d", subUid)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetAccountPositionResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetAccountPositionResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) CrossGetAccountPositionAsync(data chan account.GetAccountPositionResponse, contractCode string, subUid int64) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_position_info", nil)
+	if subUid != 0 {
+		url = ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_position_info", nil)
 	}
 
 	// content

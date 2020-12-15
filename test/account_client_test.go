@@ -59,11 +59,11 @@ func TestAccountClient_CrossGetAccountInfoAsync(t *testing.T) {
 	}
 }
 
-func TestAccountClient_GetAccountPositionAsync(t *testing.T) {
+func TestAccountClient_IsolatedGetAccountPositionAsync(t *testing.T) {
 
 	data := make(chan account.GetAccountPositionResponse)
 
-	go acClient.GetAccountPositionAsync(data, "BTC-USDT", 0)
+	go acClient.IsolatedGetAccountPositionAsync(data, "BTC-USDT", 0)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -72,7 +72,30 @@ func TestAccountClient_GetAccountPositionAsync(t *testing.T) {
 		t.Log(x)
 	}
 
-	go acClient.GetAccountPositionAsync(data, "BTC-USDT", config.SubUid)
+	go acClient.IsolatedGetAccountPositionAsync(data, "BTC-USDT", config.SubUid)
+	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_CrossGetAccountPositionAsync(t *testing.T) {
+
+	data := make(chan account.GetAccountPositionResponse)
+
+	go acClient.CrossGetAccountPositionAsync(data, "BTC-USDT", 0)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	go acClient.CrossGetAccountPositionAsync(data, "BTC-USDT", config.SubUid)
 	x, ok = <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
