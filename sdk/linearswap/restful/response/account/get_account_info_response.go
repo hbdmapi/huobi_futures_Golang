@@ -1,6 +1,6 @@
 ﻿package account
 
-type GetAccountAssetsResponse struct {
+type GetAccountInfoResponse struct {
 	Status string `json:"status"`
 
 	ErrorCode int `json:"err_code,omitempty"`
@@ -36,7 +36,11 @@ type GetAccountAssetsResponse struct {
 
 		LeverRate float32 `json:"lever_rate"`
 
-		adjustFactor float32 `json:"adjust_factor"`
+		AdjustFactor float32 `json:"adjust_factor"`
+
+		MarginMode string `json:"margin_mode"`
+
+		MarginAccount string `json:"margin_account"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`

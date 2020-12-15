@@ -13,11 +13,11 @@ func init() {
 	acClient.Init(config.AccessKey, config.SecretKey, config.Host)
 }
 
-func TestAccountClient_GetAccountAssetsAsync(t *testing.T) {
+func TestAccountClient_IsolatedGetAccountInfoAsync(t *testing.T) {
 
-	data := make(chan account.GetAccountAssetsResponse)
+	data := make(chan account.GetAccountInfoResponse)
 
-	go acClient.GetAccountAssetsAsync(data, "BTC-USDT", 0)
+	go acClient.IsolatedGetAccountInfoAsync(data, "BTC-USDT", 0)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -26,7 +26,30 @@ func TestAccountClient_GetAccountAssetsAsync(t *testing.T) {
 		t.Log(x)
 	}
 
-	go acClient.GetAccountAssetsAsync(data, "BTC-USDT", config.SubUid)
+	go acClient.IsolatedGetAccountInfoAsync(data, "BTC-USDT", config.SubUid)
+	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_CrossGetAccountInfoAsync(t *testing.T) {
+
+	data := make(chan account.GetAccountInfoResponse)
+
+	go acClient.CrossGetAccountInfoAsync(data, "USDT", 0)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	go acClient.CrossGetAccountInfoAsync(data, "USDT", config.SubUid)
 	x, ok = <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
