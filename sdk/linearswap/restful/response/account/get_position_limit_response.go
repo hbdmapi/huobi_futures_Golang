@@ -15,6 +15,8 @@ type GetPositionLimitResponse struct {
 		BuyLimit float32 `json:"buy_limit"`
 
 		SellLimit float32 `json:"sell_limit"`
+
+		MarginMode string `json:"margin_mode"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`

@@ -10,6 +10,8 @@ type GetValidLeverRateResponse struct {
 	Data []struct {
 		ContractCode string `json:"contract_code"`
 
+		MarginMode string `json:"margin_mode"`
+
 		AvailableLeverRate string `json:"available_level_rate"`
 	} `json:"data,omitempty"`
 

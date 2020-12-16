@@ -1,6 +1,6 @@
 ﻿package account
 
-type GetAllSubAssetsResponse struct {
+type GetSubAccountListResponse struct {
 	Status string `json:"status"`
 
 	ErrorCode int `json:"err_code,omitempty"`
@@ -22,6 +22,10 @@ type GetAllSubAssetsResponse struct {
 			LiquidationPrice float32 `json:"liquidation_price,omitempty"`
 
 			RiskRate float32 `json:"risk_rate,omitempty"`
+
+			MarginMode string `json:"margin_mode"`
+
+			MarginAccount string `json:"margin_account"`
 		}
 	} `json:"data,omitempty"`
 

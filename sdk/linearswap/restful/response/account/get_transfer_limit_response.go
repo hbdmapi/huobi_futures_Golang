@@ -29,6 +29,10 @@ type GetTransferLimitResponse struct {
 		NetTransferInMaxDaily float32 `json:"net_transfer_in_max_daily"`
 
 		NetTransferOutMaxDaily float32 `json:"net_transfer_out_max_daily"`
+
+		MarginMode string `json:"margin_mode"`
+
+		MarginAccount string `json:"margin_account"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`

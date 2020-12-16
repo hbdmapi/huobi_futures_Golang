@@ -47,7 +47,7 @@ func (ac *AccountClient) IsolatedGetAccountInfoAsync(data chan account.GetAccoun
 	result := account.GetAccountInfoResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAccountAssetsResponse error: %s", getErr)
+		log.Error("convert json to GetAccountInfoResponse error: %s", jsonErr)
 	}
 	data <- result
 }
@@ -78,7 +78,7 @@ func (ac *AccountClient) CrossGetAccountInfoAsync(data chan account.GetAccountIn
 	result := account.GetAccountInfoResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAccountAssetsResponse error: %s", getErr)
+		log.Error("convert json to GetAccountInfoResponse error: %s", jsonErr)
 	}
 	data <- result
 }
@@ -108,7 +108,7 @@ func (ac *AccountClient) IsolatedGetAccountPositionAsync(data chan account.GetAc
 	result := account.GetAccountPositionResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAccountPositionResponse error: %s", getErr)
+		log.Error("convert json to GetAccountPositionResponse error: %s", jsonErr)
 	}
 	data <- result
 }
@@ -138,12 +138,50 @@ func (ac *AccountClient) CrossGetAccountPositionAsync(data chan account.GetAccou
 	result := account.GetAccountPositionResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAccountPositionResponse error: %s", getErr)
+		log.Error("convert json to GetAccountPositionResponse error: %s", jsonErr)
 	}
 	data <- result
 }
 
-func (ac *AccountClient) GetAllSubAssetsAsync(data chan account.GetAllSubAssetsResponse, contractCode string) {
+func (ac *AccountClient) IsolatedGetAssetsPositionAsync(data chan account.GetAssetsPositionResponse, contractCode string) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_account_position_info", nil)
+
+	// content
+	content := fmt.Sprintf("{\"contract_code\": \"%s\"}", contractCode)
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetAssetsPositionResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetAssetsPositionResponse error: %s", jsonErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) CrossGetAssetsPositionAsync(data chan account.GetAssetsPositionResponseSingle, marginAccount string) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_account_position_info", nil)
+
+	// content
+	content := fmt.Sprintf("{\"margin_account\": \"%s\"}", marginAccount)
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetAssetsPositionResponseSingle{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetAssetsPositionResponse error: %s", jsonErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) IsolatedGetAccountListAsync(data chan account.GetSubAccountListResponse, contractCode string) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_list", nil)
 
@@ -160,10 +198,35 @@ func (ac *AccountClient) GetAllSubAssetsAsync(data chan account.GetAllSubAssetsR
 	if getErr != nil {
 		log.Error("http get error: %s", getErr)
 	}
-	result := account.GetAllSubAssetsResponse{}
+	result := account.GetSubAccountListResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
 		log.Error("convert json to GetAllSubAssetsResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) CrossGetAccountListAsync(data chan account.GetSubAccountListResponse, marginAccount string) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_account_list", nil)
+
+	// content
+	content := ""
+	if marginAccount != "" {
+		content = fmt.Sprintf(",\"margin_account\": \"%s\"", marginAccount)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetSubAccountListResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetSubAccountListResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -192,7 +255,7 @@ func (ac *AccountClient) AccountTransferAsync(data chan account.AccountTransferR
 	result := account.AccountTransferResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to AccountTransferResponse error: %s", getErr)
+		log.Error("convert json to AccountTransferResponse error: %s", jsonErr)
 	}
 	data <- result
 }
@@ -238,12 +301,12 @@ func (ac *AccountClient) GetAccountTransHisAsync(data chan account.GetAccountTra
 	result := account.GetAccountTransHisResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetAccountTransHisResponse error: %s", getErr)
+		log.Error("convert json to GetAccountTransHisResponse error: %s", jsonErr)
 	}
 	data <- result
 }
 
-func (ac *AccountClient) GetValidLeverRateAsync(data chan account.GetValidLeverRateResponse, contractCode string) {
+func (ac *AccountClient) IsolatedGetValidLeverRateAsync(data chan account.GetValidLeverRateResponse, contractCode string) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_available_level_rate", nil)
 
@@ -256,7 +319,25 @@ func (ac *AccountClient) GetValidLeverRateAsync(data chan account.GetValidLeverR
 	result := account.GetValidLeverRateResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetValidLeverRateResponse error: %s", getErr)
+		log.Error("convert json to GetValidLeverRateResponse error: %s", jsonErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) CrossGetValidLeverRateAsync(data chan account.GetValidLeverRateResponse, contractCode string) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_available_level_rate", nil)
+
+	// content
+	content := fmt.Sprintf("{ \"contract_code\": \"%s\" }", contractCode)
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetValidLeverRateResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetValidLeverRateResponse error: %s", jsonErr)
 	}
 	data <- result
 }
@@ -280,7 +361,7 @@ func (ac *AccountClient) GetOrderLimitAsync(data chan account.GetOrderLimitRespo
 	result := account.GetOrderLimitResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetOrderLimitResponse error: %s", getErr)
+		log.Error("convert json to GetOrderLimitResponse error: %s", jsonErr)
 	}
 	data <- result
 }
@@ -298,12 +379,12 @@ func (ac *AccountClient) GetFeeAsync(data chan account.GetFeeResponse, contractC
 	result := account.GetFeeResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetFeeResponse error: %s", getErr)
+		log.Error("convert json to GetFeeResponse error: %s", jsonErr)
 	}
 	data <- result
 }
 
-func (ac *AccountClient) GetTransferLimitAsync(data chan account.GetTransferLimitResponse, contractCode string) {
+func (ac *AccountClient) IsolatedGetTransferLimitAsync(data chan account.GetTransferLimitResponse, contractCode string) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_transfer_limit", nil)
 
@@ -322,12 +403,36 @@ func (ac *AccountClient) GetTransferLimitAsync(data chan account.GetTransferLimi
 	result := account.GetTransferLimitResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetTransferLimitResponse error: %s", getErr)
+		log.Error("convert json to GetTransferLimitResponse error: %s", jsonErr)
 	}
 	data <- result
 }
 
-func (ac *AccountClient) GetPositionLimitAsync(data chan account.GetPositionLimitResponse, contractCode string) {
+func (ac *AccountClient) CrossGetTransferLimitAsync(data chan account.GetTransferLimitResponse, marginAccount string) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_transfer_limit", nil)
+
+	// content
+	content := ""
+	if marginAccount != "" {
+		content += fmt.Sprintf(",\"margin_account\": \"%s\"", marginAccount)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetTransferLimitResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetTransferLimitResponse error: %s", jsonErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) IsolatedGetPositionLimitAsync(data chan account.GetPositionLimitResponse, contractCode string) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_position_limit", nil)
 
@@ -346,7 +451,31 @@ func (ac *AccountClient) GetPositionLimitAsync(data chan account.GetPositionLimi
 	result := account.GetPositionLimitResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetPositionLimitResponse error: %s", getErr)
+		log.Error("convert json to GetPositionLimitResponse error: %s", jsonErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) CrossGetPositionLimitAsync(data chan account.GetPositionLimitResponse, contractCode string) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_position_limit", nil)
+
+	// content
+	content := ""
+	if contractCode != "" {
+		content += fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetPositionLimitResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetPositionLimitResponse error: %s", jsonErr)
 	}
 	data <- result
 }
@@ -363,7 +492,7 @@ func (ac *AccountClient) GetApiTradingStatusAsync(data chan account.GetApiTradin
 	result := account.GetApiTradingStatusResponse{}
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
-		log.Error("convert json to GetApiTradingStatusResponse error: %s", getErr)
+		log.Error("convert json to GetApiTradingStatusResponse error: %s", jsonErr)
 	}
 	data <- result
 }

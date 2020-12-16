@@ -105,11 +105,53 @@ func TestAccountClient_CrossGetAccountPositionAsync(t *testing.T) {
 	}
 }
 
-func TestAccountClient_GetAllSubAssetsAsync(t *testing.T) {
+func TestAccountClient_IsolatedGetAssetsPositionAsync(t *testing.T) {
 
-	data := make(chan account.GetAllSubAssetsResponse)
+	data := make(chan account.GetAssetsPositionResponse)
 
-	go acClient.GetAllSubAssetsAsync(data, "BTC-USDT")
+	go acClient.IsolatedGetAssetsPositionAsync(data, "BTC-USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_CrossGetAssetsPositionAsync(t *testing.T) {
+
+	data := make(chan account.GetAssetsPositionResponseSingle)
+
+	go acClient.CrossGetAssetsPositionAsync(data, "USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_IsolatedGetAccountListAsync(t *testing.T) {
+
+	data := make(chan account.GetSubAccountListResponse)
+
+	go acClient.IsolatedGetAccountListAsync(data, "BTC-USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_CrossGetAccountListAsync(t *testing.T) {
+
+	data := make(chan account.GetSubAccountListResponse)
+
+	go acClient.CrossGetAccountListAsync(data, "USDT")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -165,11 +207,25 @@ func TestAccountClient_GetAccountTransHisAsync(t *testing.T) {
 	}
 }
 
-func TestAccountClient_GetValidLeverRateAsync(t *testing.T) {
+func TestAccountClient_IsolatedGetValidLeverRateAsync(t *testing.T) {
 
 	data := make(chan account.GetValidLeverRateResponse)
 
-	go acClient.GetValidLeverRateAsync(data, "BTC-USDT")
+	go acClient.IsolatedGetValidLeverRateAsync(data, "BTC-USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_CrossGetValidLeverRateAsync(t *testing.T) {
+
+	data := make(chan account.GetValidLeverRateResponse)
+
+	go acClient.CrossGetValidLeverRateAsync(data, "BTC-USDT")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -207,11 +263,39 @@ func TestAccountClient_GetFeeAsync(t *testing.T) {
 	}
 }
 
-func TestAccountClient_GetTransferLimitAsync(t *testing.T) {
+func TestAccountClient_IsolatedGetTransferLimitAsync(t *testing.T) {
 
 	data := make(chan account.GetTransferLimitResponse)
 
-	go acClient.GetTransferLimitAsync(data, "BTC-USDT")
+	go acClient.IsolatedGetTransferLimitAsync(data, "BTC-USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_CrossGetTransferLimitAsync(t *testing.T) {
+
+	data := make(chan account.GetTransferLimitResponse)
+
+	go acClient.CrossGetTransferLimitAsync(data, "USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_IsolatedGetPositionLimitAsync(t *testing.T) {
+
+	data := make(chan account.GetPositionLimitResponse)
+
+	go acClient.IsolatedGetPositionLimitAsync(data, "BTC-USDT")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -225,7 +309,7 @@ func TestAccountClient_GetPositionLimitAsync(t *testing.T) {
 
 	data := make(chan account.GetPositionLimitResponse)
 
-	go acClient.GetPositionLimitAsync(data, "BTC-USDT")
+	go acClient.CrossGetPositionLimitAsync(data, "BTC-USDT")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
