@@ -54,6 +54,10 @@ type GetHisOrderResponse struct {
 			FailCode int `json:"fail_code,omitempty"`
 
 			FailReason string `json:"fail_reason,omitempty"`
+
+			MarginMode string `json:"margin_mode"`
+
+			MarginAccount string `json:"margin_account"`
 		} `json:"orders"`
 
 		TotalPage int `json:"total_page"`

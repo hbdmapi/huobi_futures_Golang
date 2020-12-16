@@ -19,7 +19,7 @@ type GetOpenOrderResponse struct {
 
 			OrderType int `json:"order_type"`
 
-			Direction string `json:"v"`
+			Direction string `json:"direction"`
 
 			Offset string `json:"offset"`
 
@@ -40,6 +40,10 @@ type GetOpenOrderResponse struct {
 			OrderPriceType string `json:"order_price_type"`
 
 			Status int `json:"status"`
+
+			MarginMode string `json:"margin_mode"`
+
+			MarginAccount string `json:"margin_account"`
 		} `json:"orders"`
 
 		TotalPage int `json:"total_page"`
