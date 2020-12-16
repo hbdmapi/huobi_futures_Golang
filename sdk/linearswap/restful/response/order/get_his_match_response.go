@@ -42,6 +42,10 @@ type GetHisMatchResponse struct {
 			Role string `json:"role"`
 
 			FeeAsset string `json:"fee_asset"`
+
+			MarginMode string `json:"margin_mode"`
+
+			MarginAccount string `json:"margin_account"`
 		} `json:"trades"`
 
 		TotalPage int `json:"total_page"`

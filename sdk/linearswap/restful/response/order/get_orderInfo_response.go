@@ -57,6 +57,10 @@ type GetOrderInfoResponse struct {
 		LiquidationType string `json:"liquidation_type"`
 
 		CanceledAt int64 `json:"canceled_at"`
+
+		MarginMode string `json:"margin_mode"`
+
+		MarginAccount string `json:"margin_account"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`

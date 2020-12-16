@@ -54,6 +54,10 @@ type GetHisOrderResponse struct {
 			FeeAsset string `json:"fee_asset"`
 
 			LiquidationType string `json:"liquidation_type"`
+
+			MarginMode string `json:"margin_mode"`
+
+			MarginAccount string `json:"margin_account"`
 		} `json:"orders"`
 
 		TotalPage int `json:"total_page"`

@@ -70,6 +70,10 @@ type GetOrderDetailResponse struct {
 
 		TotalSize int `json:"total_size"`
 
+		MarginMode string `json:"margin_mode"`
+
+		MarginAccount string `json:"margin_account"`
+
 		Trades []struct {
 			Id string `json:"id"`
 

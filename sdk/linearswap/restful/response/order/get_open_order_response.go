@@ -58,6 +58,10 @@ type GetOpenOrderResponse struct {
 			LiquidationType string `json:"liquidation_type"`
 
 			CanceledAt int64 `json:"canceled_at,omitempty"`
+
+			MarginMode string `json:"margin_mode"`
+
+			MarginAccount string `json:"margin_account"`
 		} `json:"orders"`
 
 		TotalPage int `json:"total_page"`
