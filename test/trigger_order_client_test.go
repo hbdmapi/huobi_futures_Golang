@@ -119,3 +119,27 @@ func TestTriggerOrderClient_CrossGetHisOrderAsync(t *testing.T) {
 		t.Log(x)
 	}
 }
+
+func TestTriggerOrderClient_TpslOrderAsync(t *testing.T) {
+	data := make(chan responsetriggerorder.TpslOrderResponse)
+
+	request := requesttiggerorder.TpslOrderRequest{"XRP-USDT", "buy", 1, 0.25, 0.25, "limit", 0.3, 0.3, "limit"}
+	go odClient.IsolatedTpslOrderAsync(data, request)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	request = requesttiggerorder.TpslOrderRequest{"ETH-USDT", "buy", 1, 1000, 1000, "limit", 1100, 1100, "limit"}
+	go odClient.CrossTpslOrderAsync(data, request)
+	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}

@@ -231,3 +231,41 @@ func (toc *TriggerOrderClient) CrossGetHisOrderAsync(data chan responsetriggeror
 	}
 	data <- result
 }
+
+func (oc *OrderClient) IsolatedTpslOrderAsync(data chan responsetriggerorder.TpslOrderResponse, request requesttiggerorder.TpslOrderRequest) {
+	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_tpsl_order", nil)
+
+	content, err := json.Marshal(request)
+	if err != nil {
+		log.Error("PlaceOrderRequest to json error: %v", err)
+	}
+	getResp, getErr := reqbuilder.HttpPost(url, string(content))
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responsetriggerorder.TpslOrderResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to TpslOrderResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (oc *OrderClient) CrossTpslOrderAsync(data chan responsetriggerorder.TpslOrderResponse, request requesttiggerorder.TpslOrderRequest) {
+	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_tpsl_order", nil)
+
+	content, err := json.Marshal(request)
+	if err != nil {
+		log.Error("PlaceOrderRequest to json error: %v", err)
+	}
+	getResp, getErr := reqbuilder.HttpPost(url, string(content))
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responsetriggerorder.TpslOrderResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to TpslOrderResponse error: %s", getErr)
+	}
+	data <- result
+}
