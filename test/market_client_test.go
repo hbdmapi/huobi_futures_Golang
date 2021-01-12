@@ -464,3 +464,16 @@ func TestMarketClient_GetBasisAsync(t *testing.T) {
 		t.Log(x)
 	}
 }
+
+func TestMarketClient_GetEstimatedSettlementPriceAsync(t *testing.T) {
+	data := make(chan market.GetEstimatedSettlementPriceResponse)
+
+	go mkClient.GetEstimatedSettlementPriceAsync(data, "BTC-USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}

@@ -593,3 +593,29 @@ func (mc *MarketClient) GetBasisAsync(data chan market.GetBasisResponse, contrac
 	}
 	data <- result
 }
+
+func (mc *MarketClient) GetEstimatedSettlementPriceAsync(data chan market.GetEstimatedSettlementPriceResponse, contractCode string) {
+	// location
+	location := "/linear-swap-api/v1/swap_estimated_settlement_price"
+
+	// option
+	option := ""
+	if contractCode != "" {
+		option += fmt.Sprintf("?contract_code=%s", contractCode)
+	}
+	if option != "" {
+		location += option
+	}
+
+	url := mc.PUrlBuilder.Build(location, nil)
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := market.GetEstimatedSettlementPriceResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetEstimatedSettlementPriceResponse error: %s", getErr)
+	}
+	data <- result
+}
