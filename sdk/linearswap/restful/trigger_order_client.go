@@ -269,3 +269,225 @@ func (oc *OrderClient) CrossTpslOrderAsync(data chan responsetriggerorder.TpslOr
 	}
 	data <- result
 }
+
+func (toc *TriggerOrderClient) IsolatedTpslCancelAsync(data chan responsetriggerorder.CancelOrderResponse, contractCode string, orderId string) {
+	// url
+	url := toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_tpsl_cancel", nil)
+	if orderId == "" {
+		url = toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_tpsl_cancelall", nil)
+	}
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
+	if orderId != "" {
+		content += fmt.Sprintf(",\"order_id\": \"%s\"", orderId)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{ %s }", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, string(content))
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responsetriggerorder.CancelOrderResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to CancelOrderResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (toc *TriggerOrderClient) CrossTpslCancelAsync(data chan responsetriggerorder.CancelOrderResponse, contractCode string, orderId string) {
+	// url
+	url := toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_tpsl_cancel", nil)
+	if orderId == "" {
+		url = toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_tpsl_cancelall", nil)
+	}
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
+	if orderId != "" {
+		content += fmt.Sprintf(",\"order_id\": \"%s\"", orderId)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{ %s }", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, string(content))
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responsetriggerorder.CancelOrderResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to CancelOrderResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (toc *TriggerOrderClient) IsolatedGetTpslOpenOrderAsync(data chan responsetriggerorder.GetOpenOrderResponse, contractCode string, pageIndex int, pageSize int) {
+	// url
+	url := toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_tpsl_openorders", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
+	if pageIndex != 0 {
+		content += fmt.Sprintf(",\"page_index\": %d", pageIndex)
+	}
+	if pageSize != 0 {
+		content += fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{ %s }", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, string(content))
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responsetriggerorder.GetOpenOrderResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetOpenOrderResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (toc *TriggerOrderClient) CrossGetTpslOpenOrderAsync(data chan responsetriggerorder.GetOpenOrderResponse, contractCode string, pageIndex int, pageSize int) {
+	// url
+	url := toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_tpsl_openorders", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
+	if pageIndex != 0 {
+		content += fmt.Sprintf(",\"page_index\": %d", pageIndex)
+	}
+	if pageSize != 0 {
+		content += fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{ %s }", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, string(content))
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responsetriggerorder.GetOpenOrderResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetOpenOrderResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (toc *TriggerOrderClient) IsolatedGetTpslHisOrderAsync(data chan responsetriggerorder.GetHisOrderResponse,
+	contractCode string, status string, createDate int, pageIndex int, pageSize int, sortBy string) {
+	// url
+	url := toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_tpsl_hisorders", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\":\"%s\", \"status\":\"%s\", \"create_date\":%d", contractCode, status, createDate)
+	if pageIndex != 0 {
+		content += fmt.Sprintf(",\"page_index\": %d", pageIndex)
+	}
+	if pageSize != 0 {
+		content += fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if sortBy != "" {
+		content += fmt.Sprintf(",\"sort_by\":\"%s\"", sortBy)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{ %s }", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, string(content))
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responsetriggerorder.GetHisOrderResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetHisOrderResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (toc *TriggerOrderClient) CrossGetTpslHisOrderAsync(data chan responsetriggerorder.GetHisOrderResponse,
+	contractCode string, status string, createDate int, pageIndex int, pageSize int, sortBy string) {
+	// url
+	url := toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_tpsl_hisorders", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\":\"%s\", \"status\":\"%s\", \"create_date\":%d", contractCode, status, createDate)
+	if pageIndex != 0 {
+		content += fmt.Sprintf(",\"page_index\": %d", pageIndex)
+	}
+	if pageSize != 0 {
+		content += fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if sortBy != "" {
+		content += fmt.Sprintf(",\"sort_by\":\"%s\"", sortBy)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{ %s }", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, string(content))
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responsetriggerorder.GetHisOrderResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetHisOrderResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (toc *TriggerOrderClient) IsolatedGetRelationTpslOrderAsync(data chan responsetriggerorder.GetRelationTpslOrderResponse,
+	contractCode string, orderId int) {
+	// url
+	url := toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_relation_tpsl_order", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\":\"%s\", \"order_id\":%d", contractCode, orderId)
+	if content != "" {
+		content = fmt.Sprintf("{ %s }", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, string(content))
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responsetriggerorder.GetRelationTpslOrderResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetRelationTpslOrderResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (toc *TriggerOrderClient) CrossGetRelationTpslOrderAsync(data chan responsetriggerorder.GetRelationTpslOrderResponse,
+	contractCode string, orderId int) {
+	// url
+	url := toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_relation_tpsl_order", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\":\"%s\", \"order_id\":%d", contractCode, orderId)
+	if content != "" {
+		content = fmt.Sprintf("{ %s }", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, string(content))
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responsetriggerorder.GetRelationTpslOrderResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetRelationTpslOrderResponse error: %s", getErr)
+	}
+	data <- result
+}

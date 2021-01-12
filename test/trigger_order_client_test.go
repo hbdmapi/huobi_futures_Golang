@@ -123,7 +123,7 @@ func TestTriggerOrderClient_CrossGetHisOrderAsync(t *testing.T) {
 func TestTriggerOrderClient_TpslOrderAsync(t *testing.T) {
 	data := make(chan responsetriggerorder.TpslOrderResponse)
 
-	request := requesttiggerorder.TpslOrderRequest{"XRP-USDT", "buy", 1, 0.25, 0.25, "limit", 0.3, 0.3, "limit"}
+	request := requesttiggerorder.TpslOrderRequest{"ADA-USDT", "buy", 1, 0.25, 0.25, "limit", 0.31, 0.31, "limit"}
 	go odClient.IsolatedTpslOrderAsync(data, request)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
@@ -133,8 +133,96 @@ func TestTriggerOrderClient_TpslOrderAsync(t *testing.T) {
 		t.Log(x)
 	}
 
-	request = requesttiggerorder.TpslOrderRequest{"ETH-USDT", "buy", 1, 1000, 1000, "limit", 1100, 1100, "limit"}
+	request = requesttiggerorder.TpslOrderRequest{"ADA-USDT", "buy", 1, 0.25, 0.25, "limit", 0.31, 0.31, "limit"}
 	go odClient.CrossTpslOrderAsync(data, request)
+	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestTriggerOrderClient_TpslCancelAsync(t *testing.T) {
+	data := make(chan responsetriggerorder.CancelOrderResponse)
+
+	go todClient.IsolatedTpslCancelAsync(data, "ADA-USDT", "")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	go todClient.CrossTpslCancelAsync(data, "ADA-USDT", "")
+	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestTriggerOrderClient_GetTpslOpenOrderAsync(t *testing.T) {
+	data := make(chan responsetriggerorder.GetOpenOrderResponse)
+
+	go todClient.IsolatedGetTpslOpenOrderAsync(data, "ADA-USDT", 0, 0)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	go todClient.CrossGetTpslOpenOrderAsync(data, "ADA-USDT", 0, 0)
+	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestTriggerOrderClient_GetTpslHisOrderAsync(t *testing.T) {
+	data := make(chan responsetriggerorder.GetHisOrderResponse)
+
+	go todClient.IsolatedGetTpslHisOrderAsync(data, "ADA-USDT", "0", 10, 0, 0, "created_at")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	go todClient.CrossGetTpslHisOrderAsync(data, "ADA-USDT", "0", 10, 0, 0, "created_at")
+	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestTriggerOrderClient_GetRelationTpslOrderAsync(t *testing.T) {
+	data := make(chan responsetriggerorder.GetRelationTpslOrderResponse)
+
+	go todClient.IsolatedGetRelationTpslOrderAsync(data, "ADA-USDT", 798613002479038466)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	go todClient.CrossGetRelationTpslOrderAsync(data, "ADA-USDT", 798613002479038466)
 	x, ok = <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)

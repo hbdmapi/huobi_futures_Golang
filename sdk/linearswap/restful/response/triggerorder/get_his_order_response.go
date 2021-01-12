@@ -55,9 +55,17 @@ type GetHisOrderResponse struct {
 
 			FailReason string `json:"fail_reason,omitempty"`
 
+			UpdateTime int64 `json:"update_time"`
+
 			MarginMode string `json:"margin_mode"`
 
 			MarginAccount string `json:"margin_account"`
+
+			TpslOrderType string `json:"tpsl_order_type,omitempty"`
+
+			SourceOrderIßd string `json:"source_order_id,omitempty"`
+
+			RelationTpslOrderId string `json:"relation_tpsl_order_id,omitempty"`
 		} `json:"orders"`
 
 		TotalPage int `json:"total_page"`
