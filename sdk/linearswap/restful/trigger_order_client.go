@@ -175,7 +175,7 @@ func (toc *TriggerOrderClient) CrossGetOpenOrderAsync(data chan responsetriggero
 }
 
 func (toc *TriggerOrderClient) IsolatedGetHisOrderAsync(data chan responsetriggerorder.GetHisOrderResponse, contractCode string, tradeType int, status string, createDate int,
-	pageIndex int, pageSize int) {
+	pageIndex int, pageSize int, sortBy string) {
 	// url
 	url := toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_trigger_hisorders", nil)
 
@@ -186,6 +186,9 @@ func (toc *TriggerOrderClient) IsolatedGetHisOrderAsync(data chan responsetrigge
 	}
 	if pageSize != 0 {
 		content += fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if sortBy != "" {
+		content += fmt.Sprintf(",\"sort_by\": \"%s\"", sortBy)
 	}
 	if content != "" {
 		content = fmt.Sprintf("{ %s }", content[1:])
@@ -204,7 +207,7 @@ func (toc *TriggerOrderClient) IsolatedGetHisOrderAsync(data chan responsetrigge
 }
 
 func (toc *TriggerOrderClient) CrossGetHisOrderAsync(data chan responsetriggerorder.GetHisOrderResponse, contractCode string, tradeType int, status string, createDate int,
-	pageIndex int, pageSize int) {
+	pageIndex int, pageSize int, sortBy string) {
 	// url
 	url := toc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_trigger_hisorders", nil)
 
@@ -215,6 +218,9 @@ func (toc *TriggerOrderClient) CrossGetHisOrderAsync(data chan responsetriggeror
 	}
 	if pageSize != 0 {
 		content += fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if sortBy != "" {
+		content += fmt.Sprintf(",\"sort_by\": \"%s\"", sortBy)
 	}
 	if content != "" {
 		content = fmt.Sprintf("{ %s }", content[1:])

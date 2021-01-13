@@ -97,7 +97,7 @@ func TestTriggerOrderClient_CrossGetOpenOrderAsync(t *testing.T) {
 func TestTriggerOrderClient_IsolatedGetHisOrderAsync(t *testing.T) {
 	data := make(chan responsetriggerorder.GetHisOrderResponse)
 
-	go todClient.IsolatedGetHisOrderAsync(data, "XRP-USDT", 0, "0", 1, 1, 20)
+	go todClient.IsolatedGetHisOrderAsync(data, "XRP-USDT", 0, "0", 1, 1, 20, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -110,7 +110,7 @@ func TestTriggerOrderClient_IsolatedGetHisOrderAsync(t *testing.T) {
 func TestTriggerOrderClient_CrossGetHisOrderAsync(t *testing.T) {
 	data := make(chan responsetriggerorder.GetHisOrderResponse)
 
-	go todClient.CrossGetHisOrderAsync(data, "XRP-USDT", 0, "0", 1, 1, 20)
+	go todClient.CrossGetHisOrderAsync(data, "XRP-USDT", 0, "0", 1, 1, 20, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)

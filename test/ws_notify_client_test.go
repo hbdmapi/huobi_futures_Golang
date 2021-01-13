@@ -10,7 +10,7 @@ import (
 var wsnfClient *ws.WSNotifyClient
 
 func init() {
-	wsnfClient = new(ws.WSNotifyClient).Init(config.AccessKey, config.SecretKey, "")
+	//wsnfClient = new(ws.WSNotifyClient).Init(config.AccessKey, config.SecretKey, "")
 }
 
 func TestWSNotifyClient_SubOrders(t *testing.T) {

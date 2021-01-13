@@ -20,7 +20,11 @@ type GetContractInfoResponse struct {
 
 		CreateDate string `json:"create_date"`
 
+		DeliveryTime string `json:"delivery_time"`
+
 		ContractStatus int `json:"contract_status"`
+
+		SupportMarginMode string `json:"support_margin_mode"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`

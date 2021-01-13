@@ -74,6 +74,8 @@ type GetOrderDetailResponse struct {
 
 		MarginAccount string `json:"margin_account"`
 
+		IsTpsl int `json:"is_tpsl"`
+
 		Trades []struct {
 			Id string `json:"id"`
 

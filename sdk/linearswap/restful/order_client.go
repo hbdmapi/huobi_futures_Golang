@@ -391,7 +391,7 @@ func (oc *OrderClient) CrossGetOpenOrderAsync(data chan responseorder.GetOpenOrd
 }
 
 func (oc *OrderClient) IsolatedGetHisOrderAsync(data chan responseorder.GetHisOrderResponse, contractCode string, tradeType int, fcType int, status string,
-	createDate int, pageIndex int, pageSize int) {
+	createDate int, pageIndex int, pageSize int, sortBy string) {
 	// url
 	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_hisorders", nil)
 
@@ -402,6 +402,9 @@ func (oc *OrderClient) IsolatedGetHisOrderAsync(data chan responseorder.GetHisOr
 	}
 	if pageSize != 0 {
 		content += fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if sortBy != "" {
+		content += fmt.Sprintf(",\"sort_by\": \"%s\"", sortBy)
 	}
 	if content != "" {
 		content = fmt.Sprintf("{%s}", content[1:])
@@ -420,7 +423,7 @@ func (oc *OrderClient) IsolatedGetHisOrderAsync(data chan responseorder.GetHisOr
 }
 
 func (oc *OrderClient) CrossGetHisOrderAsync(data chan responseorder.GetHisOrderResponse, contractCode string, tradeType int, fcType int, status string,
-	createDate int, pageIndex int, pageSize int) {
+	createDate int, pageIndex int, pageSize int, sortBy string) {
 	// url
 	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_hisorders", nil)
 
@@ -431,6 +434,9 @@ func (oc *OrderClient) CrossGetHisOrderAsync(data chan responseorder.GetHisOrder
 	}
 	if pageSize != 0 {
 		content += fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if sortBy != "" {
+		content += fmt.Sprintf(",\"sort_by\": \"%s\"", sortBy)
 	}
 	if content != "" {
 		content = fmt.Sprintf("{%s}", content[1:])

@@ -17,7 +17,7 @@ func init() {
 func TestOrderClient_IsolatedPlaceOrderAsync(t *testing.T) {
 	data := make(chan responseorder.PlaceOrderResponse)
 
-	request := requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.45, 1, "buy", "open", 1, "limit"}
+	request := requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.45, 1, "sell", "open", 1, "limit", 0, 0, "", 0, 0, ""}
 	go odClient.IsolatedPlaceOrderAsync(data, request)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
@@ -31,7 +31,7 @@ func TestOrderClient_IsolatedPlaceOrderAsync(t *testing.T) {
 func TestOrderClient_CrossPlaceOrderAsync(t *testing.T) {
 	data := make(chan responseorder.PlaceOrderResponse)
 
-	request := requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.45, 1, "sell", "open", 1, "limit"}
+	request := requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.45, 1, "sell", "open", 1, "limit", 0.3, 0.3, "", 0.5, 0.5, ""}
 	go odClient.CrossPlaceOrderAsync(data, request)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
@@ -46,8 +46,8 @@ func TestOrderClient_IsolatedPlaceBatchOrderAsync(t *testing.T) {
 	data := make(chan responseorder.PlaceBatchOrderResponse)
 
 	request := requestorder.BatchPlaceOrderRequest{
-		requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.45, 1, "buy", "open", 3, "limit"},
-		requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.45, 1, "buy", "open", 3, "limit"},
+		requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.45, 1, "buy", "open", 3, "limit", 0, 0, "", 0, 0, ""},
+		requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.45, 1, "buy", "open", 3, "limit", 0, 0, "", 0, 0, ""},
 	}
 	go odClient.IsolatedPlaceBatchOrderAsync(data, request)
 	x, ok := <-data
@@ -63,8 +63,8 @@ func TestOrderClient_CrossPlaceBatchOrderAsync(t *testing.T) {
 	data := make(chan responseorder.PlaceBatchOrderResponse)
 
 	request := requestorder.BatchPlaceOrderRequest{
-		requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.48, 1, "sell", "open", 3, "limit"},
-		requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.48, 1, "sell", "open", 3, "limit"},
+		requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.48, 1, "sell", "open", 3, "limit", 0.2, 0.2, "", 0.5, 0.5, ""},
+		requestorder.PlaceOrderRequest{"XRP-USDT", 0, 0.48, 1, "sell", "open", 3, "limit", 0.1, 0.1, "", 0.3, 0.3, ""},
 	}
 	go odClient.CrossPlaceBatchOrderAsync(data, request)
 	x, ok := <-data
@@ -162,7 +162,7 @@ func TestOrderClient_IsolatedGetOrderInfoAsync(t *testing.T) {
 func TestOrderClient_CrossGetOrderInfoAsync(t *testing.T) {
 	data := make(chan responseorder.GetOrderInfoResponse)
 
-	go odClient.CrossGetOrderInfoAsync(data, "XRP-USDT", "788765555464527872", "")
+	go odClient.CrossGetOrderInfoAsync(data, "XRP-USDT", "798855736238379008,798858712306499584", "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -188,7 +188,7 @@ func TestOrderClient_IsolatedGetOrderDetailAsync(t *testing.T) {
 func TestOrderClient_CrossGetOrderDetailAsync(t *testing.T) {
 	data := make(chan responseorder.GetOrderDetailResponse)
 
-	go odClient.CrossGetOrderDetailAsync(data, "XRP-USDT", 788765555464527872, 0, 1, 1, 10)
+	go odClient.CrossGetOrderDetailAsync(data, "XRP-USDT", 798855736238379008, 0, 1, 1, 10)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -227,7 +227,7 @@ func TestOrderClient_CrossGetOpenOrderAsync(t *testing.T) {
 func TestOrderClient_IsolatedGetHisOrderAsync(t *testing.T) {
 	data := make(chan responseorder.GetHisOrderResponse)
 
-	go odClient.IsolatedGetHisOrderAsync(data, "XRP-USDT", 0, 1, "0", 5, 1, 20)
+	go odClient.IsolatedGetHisOrderAsync(data, "ADA-USDT", 0, 1, "0", 5, 1, 20, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -240,7 +240,7 @@ func TestOrderClient_IsolatedGetHisOrderAsync(t *testing.T) {
 func TestOrderClient_CrossGetHisOrderAsync(t *testing.T) {
 	data := make(chan responseorder.GetHisOrderResponse)
 
-	go odClient.CrossGetHisOrderAsync(data, "XRP-USDT", 0, 1, "0", 5, 1, 20)
+	go odClient.CrossGetHisOrderAsync(data, "XRP-USDT", 0, 1, "0", 5, 1, 20, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)

@@ -17,6 +17,12 @@ type GetOpenInterestResponse struct {
 		Volume float32 `json:"volume"`
 
 		Value float32 `json:"value"`
+
+		TradeAmount float32 `json:"trade_amount"`
+
+		TradeVolume float32 `json:"trade_volume"`
+
+		TradeTurnover float32 `json:"trade_turnover"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`

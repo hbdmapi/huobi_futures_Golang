@@ -29,6 +29,8 @@ type GetHisOrderResponse struct {
 
 			CreateDate int64 `json:"create_date"`
 
+			UpdateTime int64 `json:"update_time	"`
+
 			OrderSource string `json:"order_source"`
 
 			OrderPriceType int `json:"order_price_type"`
@@ -58,6 +60,8 @@ type GetHisOrderResponse struct {
 			MarginMode string `json:"margin_mode"`
 
 			MarginAccount string `json:"margin_account"`
+
+			IsTpsl int `json:"is_tpsl"`
 		} `json:"orders"`
 
 		TotalPage int `json:"total_page"`
