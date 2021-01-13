@@ -25,5 +25,9 @@ type SubKLineResponse struct {
 		Amount float32 `json:"amount"`
 
 		TradeTurnover float32 `json:"trade_turnover"`
+
+		Ask []float32 `json:"ask,omitempty"`
+
+		Bid []float32 `json:"bid,omitempty"`
 	} `json:"tick"`
 }

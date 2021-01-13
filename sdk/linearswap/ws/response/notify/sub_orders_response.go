@@ -59,6 +59,8 @@ type SubOrdersResponse struct {
 
 	FeeAsset string `json:"fee_asset"`
 
+	IsTpsl int `json:"is_tpsl"`
+
 	Trade []struct {
 		Id string `json:"id"`
 
