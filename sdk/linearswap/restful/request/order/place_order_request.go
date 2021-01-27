@@ -5,7 +5,7 @@ type PlaceOrderRequest struct {
 
 	ClientOrderId int64 `json:"client_order_id,omitempty"`
 
-	Price float32 `json:"price"`
+	Price float32 `json:"price,omitempty"`
 
 	Volume int64 `json:"volume"`
 

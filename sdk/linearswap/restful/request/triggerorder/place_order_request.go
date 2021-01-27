@@ -7,9 +7,9 @@ type PlaceOrderRequest struct {
 
 	TriggerPrice float32 `json:"trigger_price"`
 
-	OrderPrice float32 `json:"order_price"`
+	OrderPrice float32 `json:"order_price,omitempty"`
 
-	OrderPriceType string `json:"order_price_type"`
+	OrderPriceType string `json:"order_price_type,omitempty"`
 
 	Volume int64 `json:"volume"`
 
@@ -17,5 +17,5 @@ type PlaceOrderRequest struct {
 
 	Offset string `json:"offset"`
 
-	LeverRate int `json:"lever_rate"`
+	LeverRate int `json:"lever_rate,omitempty"`
 }

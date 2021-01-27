@@ -7,17 +7,17 @@ type TpslOrderRequest struct {
 
 	Volume int64 `json:"volume"`
 
-	TpTriggerPrice float32 `json:"tp_trigger_price"`
+	TpTriggerPrice float32 `json:"tp_trigger_price,omitempty"`
 
-	TpOrderPrice float32 `json:"tp_order_price"`
+	TpOrderPrice float32 `json:"tp_order_price,omitempty"`
 
-	TpOrderPriceType string `json:"tp_order_price_type"`
+	TpOrderPriceType string `json:"tp_order_price_type,omitempty"`
 
-	SlTriggerPrice float32 `json:"sl_trigger_price"`
+	SlTriggerPrice float32 `json:"sl_trigger_price,omitempty"`
 
-	SlOrderPrice float32 `json:"sl_order_price"`
+	SlOrderPrice float32 `json:"sl_order_price,omitempty"`
 
-	SlOrderPriceType string `json:"sl_order_price_type"`
+	SlOrderPriceType string `json:"sl_order_price_type,omitempty"`
 }
 
 type BatchTpslOrderRequest []TpslOrderRequest
