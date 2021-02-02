@@ -9,6 +9,7 @@ import (
 	"huobi_futures_Golang/sdk/reqbuilder"
 	"huobi_futures_Golang/sdk/wsbase"
 	"reflect"
+	"strings"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -242,6 +243,8 @@ func (wsOp *WebSocketOp) readLoop(conn *websocket.Conn) {
 
 func (wsOp *WebSocketOp) handleSubCallbackFun(ch string, data string, jdata map[string]interface{}) {
 	var mi *MethonInfo = nil
+	ch = strings.ToLower(ch)
+
 	if _, found := wsOp.onSubCallbackFuns[ch]; found {
 		mi = wsOp.onSubCallbackFuns[ch]
 
@@ -259,9 +262,9 @@ func (wsOp *WebSocketOp) handleSubCallbackFun(ch string, data string, jdata map[
 		if _, found := wsOp.onSubCallbackFuns["orders.*"]; found {
 			mi = wsOp.onSubCallbackFuns["orders.*"]
 		}
-	} else if ch[:12] == "matchOrders." {
-		if _, found := wsOp.onSubCallbackFuns["matchOrders.*"]; found {
-			mi = wsOp.onSubCallbackFuns["matchOrders.*"]
+	} else if ch[:12] == "matchorders." {
+		if _, found := wsOp.onSubCallbackFuns["matchorders.*"]; found {
+			mi = wsOp.onSubCallbackFuns["matchorders.*"]
 		}
 	} else if ch[:14] == "trigger_order." {
 		if _, found := wsOp.onSubCallbackFuns["trigger_order.*"]; found {
@@ -315,6 +318,7 @@ func (wsOp *WebSocketOp) sub(subStr []byte, ch string, fun interface{}, param re
 	for !wsOp.authOk {
 		time.Sleep(10)
 	}
+	ch = strings.ToLower(ch)
 
 	var mi *MethonInfo = nil
 	var found bool
