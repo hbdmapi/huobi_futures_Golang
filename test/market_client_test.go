@@ -128,10 +128,36 @@ func TestMarketClient_GetKLineAsync(t *testing.T) {
 	}
 }
 
+func TestMarketClient_GetMarkPriceKLineAsync(t *testing.T) {
+	data := make(chan market.GetStrKLineResponse)
+
+	go mkClient.GetMarkPriceKLineAsync(data, "BTC-USDT", "1min", 10)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
 func TestMarketClient_GetMergedAsync(t *testing.T) {
 	data := make(chan market.GetMergedResponse)
 
 	go mkClient.GetMergedAsync(data, "BTC-USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestMarketClient_GetBatchMergedAsync(t *testing.T) {
+	data := make(chan market.GetBatchMergedResponse)
+
+	go mkClient.GetBatchMergedAsync(data, "BTC-USDT")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)

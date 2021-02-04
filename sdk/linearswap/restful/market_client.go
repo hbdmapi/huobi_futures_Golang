@@ -118,7 +118,7 @@ func (mc *MarketClient) GetOpenInterestAsync(data chan market.GetOpenInterestRes
 
 func (mc *MarketClient) GetDepthAsync(data chan market.GetDepthResponse, contractCode string, fcType string) {
 	// location
-	location := fmt.Sprintf("/linear-swap-ex/market/depth?contract_code=%s&&type=%s", contractCode, fcType)
+	location := fmt.Sprintf("/linear-swap-ex/market/depth?contract_code=%s&type=%s", contractCode, fcType)
 
 	url := mc.PUrlBuilder.Build(location, nil)
 	getResp, getErr := reqbuilder.HttpGet(url)
@@ -135,18 +135,18 @@ func (mc *MarketClient) GetDepthAsync(data chan market.GetDepthResponse, contrac
 
 func (mc *MarketClient) GetKLineAsync(data chan market.GetKLineResponse, contractCode string, period string, size int, from int, to int) {
 	// location
-	location := fmt.Sprintf("/linear-swap-ex/market/history/kline?contract_code=%s&&period=%s", contractCode, period)
+	location := fmt.Sprintf("/linear-swap-ex/market/history/kline?contract_code=%s&period=%s", contractCode, period)
 
 	// option
 	option := ""
 	if size != 0 {
-		option += fmt.Sprintf("&&size=%d", size)
+		option += fmt.Sprintf("&size=%d", size)
 	}
 	if from != 0 {
-		option += fmt.Sprintf("&&from=%d", from)
+		option += fmt.Sprintf("&from=%d", from)
 	}
 	if to != 0 {
-		option += fmt.Sprintf("&&to=%d", to)
+		option += fmt.Sprintf("&to=%d", to)
 	}
 	if option != "" {
 		location += option
@@ -165,6 +165,23 @@ func (mc *MarketClient) GetKLineAsync(data chan market.GetKLineResponse, contrac
 	data <- result
 }
 
+func (mc *MarketClient) GetMarkPriceKLineAsync(data chan market.GetStrKLineResponse, contractCode string, period string, size int) {
+	// location
+	location := fmt.Sprintf("/index/market/history/linear_swap_mark_price_kline?contract_code=%s&period=%s&size=%d", contractCode, period, size)
+
+	url := mc.PUrlBuilder.Build(location, nil)
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := market.GetStrKLineResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetStrKLineResponse error: %s", getErr)
+	}
+	data <- result
+}
+
 func (mc *MarketClient) GetMergedAsync(data chan market.GetMergedResponse, contractCode string) {
 	// location
 	location := fmt.Sprintf("/linear-swap-ex/market/detail/merged?contract_code=%s", contractCode)
@@ -178,6 +195,32 @@ func (mc *MarketClient) GetMergedAsync(data chan market.GetMergedResponse, contr
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
 		log.Error("convert json to GetMergedResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (mc *MarketClient) GetBatchMergedAsync(data chan market.GetBatchMergedResponse, contractCode string) {
+	// location
+	location := fmt.Sprintf("/linear-swap-ex/market/detail/batch_merged")
+
+	// option
+	option := ""
+	if contractCode != "" {
+		option += fmt.Sprintf("&contract_code=%s", contractCode)
+	}
+	if option != "" {
+		location += fmt.Sprintf("?%s", option)
+	}
+
+	url := mc.PUrlBuilder.Build(location, nil)
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := market.GetBatchMergedResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetBatchMergedAsync error: %s", getErr)
 	}
 	data <- result
 }
@@ -201,7 +244,7 @@ func (mc *MarketClient) GetTradeAsync(data chan market.GetTradeResponse, contrac
 
 func (mc *MarketClient) GetHisTradeAsync(data chan market.GetHisTradeResponse, contractCode string, size int) {
 	// location
-	location := fmt.Sprintf("/linear-swap-ex/market/history/trade?contract_code=%s&&size=%d", contractCode, size)
+	location := fmt.Sprintf("/linear-swap-ex/market/history/trade?contract_code=%s&size=%d", contractCode, size)
 
 	url := mc.PUrlBuilder.Build(location, nil)
 	getResp, getErr := reqbuilder.HttpGet(url)
@@ -249,10 +292,10 @@ func (mc *MarketClient) GetInsuranceFundAsync(data chan market.GetInsuranceFundR
 	// option
 	option := ""
 	if pageIndex != 0 {
-		option += fmt.Sprintf("&&size=%d", pageIndex)
+		option += fmt.Sprintf("&size=%d", pageIndex)
 	}
 	if pageSize != 0 {
-		option += fmt.Sprintf("&&from=%d", pageSize)
+		option += fmt.Sprintf("&from=%d", pageSize)
 	}
 	if option != "" {
 		location += option
@@ -325,12 +368,12 @@ func (mc *MarketClient) CrossGetAdjustFactorFundAsync(data chan market.GetAdjust
 
 func (mc *MarketClient) GetHisOpenInterestAsync(data chan market.GetHisOpenInterestResponse, contractCode string, period string, amountType int, size int) {
 	// location
-	location := fmt.Sprintf("/linear-swap-api/v1/swap_his_open_interest?contract_code=%s&&period=%s&&amount_type=%d", contractCode, period, amountType)
+	location := fmt.Sprintf("/linear-swap-api/v1/swap_his_open_interest?contract_code=%s&period=%s&amount_type=%d", contractCode, period, amountType)
 
 	// option
 	option := ""
 	if size != 0 {
-		option += fmt.Sprintf("&&size=%d", size)
+		option += fmt.Sprintf("&size=%d", size)
 	}
 	if option != "" {
 		location += option
@@ -351,7 +394,7 @@ func (mc *MarketClient) GetHisOpenInterestAsync(data chan market.GetHisOpenInter
 
 func (mc *MarketClient) GetEliteAccountRatioAsync(data chan market.GetEliteRatioResponse, contractCode string, period string) {
 	// location
-	location := fmt.Sprintf("/linear-swap-api/v1/swap_elite_account_ratio?contract_code=%s&&period=%s", contractCode, period)
+	location := fmt.Sprintf("/linear-swap-api/v1/swap_elite_account_ratio?contract_code=%s&period=%s", contractCode, period)
 
 	url := mc.PUrlBuilder.Build(location, nil)
 	getResp, getErr := reqbuilder.HttpGet(url)
@@ -368,7 +411,7 @@ func (mc *MarketClient) GetEliteAccountRatioAsync(data chan market.GetEliteRatio
 
 func (mc *MarketClient) GetElitePositionRatioAsync(data chan market.GetEliteRatioResponse, contractCode string, period string) {
 	// location
-	location := fmt.Sprintf("/linear-swap-api/v1/swap_elite_position_ratio?contract_code=%s&&period=%s", contractCode, period)
+	location := fmt.Sprintf("/linear-swap-api/v1/swap_elite_position_ratio?contract_code=%s&period=%s", contractCode, period)
 
 	url := mc.PUrlBuilder.Build(location, nil)
 	getResp, getErr := reqbuilder.HttpGet(url)
@@ -482,10 +525,10 @@ func (mc *MarketClient) GetHisFundingRateAsync(data chan market.GetHisFundingRat
 	// option
 	option := ""
 	if pageIndex != 0 {
-		option += fmt.Sprintf("&&page_index=%d", pageIndex)
+		option += fmt.Sprintf("&page_index=%d", pageIndex)
 	}
 	if pageSize != 0 {
-		option += fmt.Sprintf("&&page_size=%d", pageSize)
+		option += fmt.Sprintf("&page_size=%d", pageSize)
 	}
 	if option != "" {
 		location += option
@@ -507,15 +550,15 @@ func (mc *MarketClient) GetHisFundingRateAsync(data chan market.GetHisFundingRat
 func (mc *MarketClient) GetLiquidationOrdersAsync(data chan market.GetLiquidationOrdersResponse, contractCode string, tradeType int, createDate int,
 	pageIndex int, pageSize int) {
 	// location
-	location := fmt.Sprintf("/linear-swap-api/v1/swap_liquidation_orders?contract_code=%s&&trade_type=%d&&create_date=%d", contractCode, tradeType, createDate)
+	location := fmt.Sprintf("/linear-swap-api/v1/swap_liquidation_orders?contract_code=%s&trade_type=%d&create_date=%d", contractCode, tradeType, createDate)
 
 	// option
 	option := ""
 	if pageIndex != 0 {
-		option += fmt.Sprintf("&&page_index=%d", pageIndex)
+		option += fmt.Sprintf("&page_index=%d", pageIndex)
 	}
 	if pageSize != 0 {
-		option += fmt.Sprintf("&&page_size=%d", pageSize)
+		option += fmt.Sprintf("&page_size=%d", pageSize)
 	}
 	if option != "" {
 		location += option
@@ -536,7 +579,7 @@ func (mc *MarketClient) GetLiquidationOrdersAsync(data chan market.GetLiquidatio
 
 func (mc *MarketClient) GetPremiumIndexKLineAsync(data chan market.GetStrKLineResponse, contractCode string, period string, size int) {
 	// location
-	location := fmt.Sprintf("/index/market/history/linear_swap_premium_index_kline?contract_code=%s&&period=%s&&size=%d", contractCode, period, size)
+	location := fmt.Sprintf("/index/market/history/linear_swap_premium_index_kline?contract_code=%s&period=%s&size=%d", contractCode, period, size)
 
 	url := mc.PUrlBuilder.Build(location, nil)
 	getResp, getErr := reqbuilder.HttpGet(url)
@@ -553,7 +596,7 @@ func (mc *MarketClient) GetPremiumIndexKLineAsync(data chan market.GetStrKLineRe
 
 func (mc *MarketClient) GetEstimatedRateKLineAsync(data chan market.GetStrKLineResponse, contractCode string, period string, size int) {
 	// location
-	location := fmt.Sprintf("/index/market/history/linear_swap_estimated_rate_kline?contract_code=%s&&period=%s&&size=%d", contractCode, period, size)
+	location := fmt.Sprintf("/index/market/history/linear_swap_estimated_rate_kline?contract_code=%s&period=%s&size=%d", contractCode, period, size)
 
 	url := mc.PUrlBuilder.Build(location, nil)
 	getResp, getErr := reqbuilder.HttpGet(url)
@@ -570,12 +613,12 @@ func (mc *MarketClient) GetEstimatedRateKLineAsync(data chan market.GetStrKLineR
 
 func (mc *MarketClient) GetBasisAsync(data chan market.GetBasisResponse, contractCode string, period string, size int, basisPriceType string) {
 	// location
-	location := fmt.Sprintf("/index/market/history/linear_swap_basis?contract_code=%s&&period=%s&&size=%d", contractCode, period, size)
+	location := fmt.Sprintf("/index/market/history/linear_swap_basis?contract_code=%s&period=%s&size=%d", contractCode, period, size)
 
 	// option
 	option := ""
 	if basisPriceType != "" {
-		option += fmt.Sprintf("&&basis_price_type=%s", basisPriceType)
+		option += fmt.Sprintf("&basis_price_type=%s", basisPriceType)
 	}
 	if option != "" {
 		location += option
