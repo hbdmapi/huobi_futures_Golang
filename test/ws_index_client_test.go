@@ -10,7 +10,7 @@ import (
 var wsixClient *ws.WSIndexClient
 
 func init() {
-	//wsixClient = new(ws.WSIndexClient).Init("")
+	wsixClient = new(ws.WSIndexClient).Init("")
 }
 
 func TestWSIndexClient_SubPremiumIndexKLine(t *testing.T) {
@@ -18,8 +18,6 @@ func TestWSIndexClient_SubPremiumIndexKLine(t *testing.T) {
 		t.Log(*m)
 	}, "")
 	time.Sleep(time.Duration(20) * time.Second)
-	wsixClient.UnsubPremiumIndexKLine("BTC-USDT", "15min", "")
-	time.Sleep(time.Duration(10) * time.Second)
 }
 
 func TestWSIndexClient_ReqPremiumIndexKLine(t *testing.T) {
@@ -27,8 +25,20 @@ func TestWSIndexClient_ReqPremiumIndexKLine(t *testing.T) {
 		t.Log(*m)
 	}, 1604395758, 1604396758, "")
 	time.Sleep(time.Duration(20) * time.Second)
-	wsixClient.UnreqPremiumIndexKLine("BTC-USDT", "15min", 1604395758, 1604396758, "")
-	time.Sleep(time.Duration(10) * time.Second)
+}
+
+func TestWSIndexClient_SubMarkPriceKLine(t *testing.T) {
+	wsixClient.SubMarkPriceKLine("BTC-USDT", "15min", func(m *index.SubIndexKLineResponse) {
+		t.Log(*m)
+	}, "")
+	time.Sleep(time.Duration(20) * time.Second)
+}
+
+func TestWSIndexClient_ReqMarkPriceKLine(t *testing.T) {
+	wsixClient.ReqMarkPriceKLine("BTC-USDT", "1min", func(m *index.ReqIndexKLineResponse) {
+		t.Log(*m)
+	}, 1612434060, 1612434260, "")
+	time.Sleep(time.Duration(20) * time.Second)
 }
 
 func TestWSIndexClient_SubEstimatedRateKLine(t *testing.T) {
@@ -36,8 +46,6 @@ func TestWSIndexClient_SubEstimatedRateKLine(t *testing.T) {
 		t.Log(*m)
 	}, "")
 	time.Sleep(time.Duration(20) * time.Second)
-	wsixClient.UnsubEstimatedRateKLine("BTC-USDT", "15min", "")
-	time.Sleep(time.Duration(10) * time.Second)
 }
 
 func TestWSIndexClient_ReqEstimatedRateKLine(t *testing.T) {
@@ -45,8 +53,6 @@ func TestWSIndexClient_ReqEstimatedRateKLine(t *testing.T) {
 		t.Log(*m)
 	}, 1604395758, 1604396758, "")
 	time.Sleep(time.Duration(20) * time.Second)
-	wsixClient.UnreqEstimatedRateKLine("BTC-USDT", "15min", 1604395758, 1604396758, "")
-	time.Sleep(time.Duration(10) * time.Second)
 }
 
 func TestWSIndexClient_SubBasis(t *testing.T) {
@@ -54,8 +60,6 @@ func TestWSIndexClient_SubBasis(t *testing.T) {
 		t.Log(*m)
 	}, "", "")
 	time.Sleep(time.Duration(20) * time.Second)
-	wsixClient.UnsubBasis("BTC-USDT", "15min", "", "")
-	time.Sleep(time.Duration(10) * time.Second)
 }
 
 func TestWSIndexClient_ReqBasis(t *testing.T) {
@@ -63,6 +67,4 @@ func TestWSIndexClient_ReqBasis(t *testing.T) {
 		t.Log(*m)
 	}, 1604395758, 1604396758, "", "")
 	time.Sleep(time.Duration(20) * time.Second)
-	wsixClient.UnreqBasis("BTC-USDT", "15min", 1604395758, 1604396758, "", "")
-	time.Sleep(time.Duration(10) * time.Second)
 }

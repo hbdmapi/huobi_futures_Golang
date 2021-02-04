@@ -37,17 +37,6 @@ func (wsIx *WSIndexClient) SubPremiumIndexKLine(contractCode string, period stri
 	wsIx.sub(jdata, ch, callbackFun, reflect.TypeOf(index.SubIndexKLineResponse{}))
 }
 
-func (wsIx *WSIndexClient) UnsubPremiumIndexKLine(contractCode string, period string, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.premium_index.%s", contractCode, period)
-	unsubData := wsbase.WSUnsubData{Unsub: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-
-	wsIx.unsub(jdata, ch)
-}
-
 func (wsIx *WSIndexClient) ReqPremiumIndexKLine(contractCode string, period string, callbackFun OnReqPremiumIndexKLineResponse,
 	from int64, to int64, id string) {
 	if id == "" {
@@ -60,18 +49,38 @@ func (wsIx *WSIndexClient) ReqPremiumIndexKLine(contractCode string, period stri
 	wsIx.req(jdata, ch, callbackFun, reflect.TypeOf(index.ReqIndexKLineResponse{}))
 }
 
-func (wsIx *WSIndexClient) UnreqPremiumIndexKLine(contractCode string, period string, from int64, to int64, id string) {
+// premium index kline end
+//-------------------------------------------------------------
+
+// -------------------------------------------------------------
+// mark price kline start
+type OnSubMarkPriceKLineResponse func(*index.SubIndexKLineResponse)
+type OnReqMarkPriceKLineResponse func(*index.ReqIndexKLineResponse)
+
+func (wsIx *WSIndexClient) SubMarkPriceKLine(contractCode string, period string, callbackFun OnSubMarkPriceKLineResponse, id string) {
 	if id == "" {
 		id = linearswap.DEFAULT_ID
 	}
-	ch := fmt.Sprintf("market.%s.premium_index.%s", contractCode, period)
-	unreqData := wsbase.WSUnreqData{Unreq: ch, Id: id, From: from, To: to}
-	jdata, _ := json.Marshal(unreqData)
+	ch := fmt.Sprintf("market.%s.mark_price.%s", contractCode, period)
+	subData := wsbase.WSSubData{Sub: ch, Id: id}
+	jdata, _ := json.Marshal(subData)
 
-	wsIx.unreq(jdata, ch)
+	wsIx.sub(jdata, ch, callbackFun, reflect.TypeOf(index.SubIndexKLineResponse{}))
 }
 
-// premium index kline end
+func (wsIx *WSIndexClient) ReqMarkPriceKLine(contractCode string, period string, callbackFun OnReqMarkPriceKLineResponse,
+	from int64, to int64, id string) {
+	if id == "" {
+		id = linearswap.DEFAULT_ID
+	}
+	ch := fmt.Sprintf("market.%s.mark_price.%s", contractCode, period)
+	reqData := wsbase.WSReqData{Req: ch, Id: id, From: from, To: to}
+	jdata, _ := json.Marshal(reqData)
+
+	wsIx.req(jdata, ch, callbackFun, reflect.TypeOf(index.ReqIndexKLineResponse{}))
+}
+
+// mark price kline end
 //-------------------------------------------------------------
 
 // -------------------------------------------------------------
@@ -91,17 +100,6 @@ func (wsIx *WSIndexClient) SubEstimatedRateKLine(contractCode string, period str
 	wsIx.sub(jdata, ch, callbackFun, reflect.TypeOf(index.SubIndexKLineResponse{}))
 }
 
-func (wsIx *WSIndexClient) UnsubEstimatedRateKLine(contractCode string, period string, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.estimated_rate.%s", contractCode, period)
-	unsubData := wsbase.WSUnsubData{Unsub: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-
-	wsIx.unsub(jdata, ch)
-}
-
 func (wsIx *WSIndexClient) ReqEstimatedRateKLine(contractCode string, period string, callbackFun OnReqEstimatedRateResponse,
 	from int64, to int64, id string) {
 	if id == "" {
@@ -112,17 +110,6 @@ func (wsIx *WSIndexClient) ReqEstimatedRateKLine(contractCode string, period str
 	jdata, _ := json.Marshal(reqData)
 
 	wsIx.req(jdata, ch, callbackFun, reflect.TypeOf(index.ReqIndexKLineResponse{}))
-}
-
-func (wsIx *WSIndexClient) UnreqEstimatedRateKLine(contractCode string, period string, from int64, to int64, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.estimated_rate.%s", contractCode, period)
-	unreqData := wsbase.WSUnreqData{Unreq: ch, Id: id, From: from, To: to}
-	jdata, _ := json.Marshal(unreqData)
-
-	wsIx.unreq(jdata, ch)
 }
 
 // estimated rate kline end
@@ -147,20 +134,6 @@ func (wsIx *WSIndexClient) SubBasis(contractCode string, period string, callback
 	wsIx.sub(jdata, ch, callbackFun, reflect.TypeOf(index.SubBasiesResponse{}))
 }
 
-func (wsIx *WSIndexClient) UnsubBasis(contractCode string, period string, basisPriceType string, id string) {
-	if basisPriceType == "" {
-		basisPriceType = "open"
-	}
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.basis.%s.%s", contractCode, period, basisPriceType)
-	unsubData := wsbase.WSUnsubData{Unsub: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-
-	wsIx.unsub(jdata, ch)
-}
-
 func (wsIx *WSIndexClient) ReqBasis(contractCode string, period string, callbackFun OnReqBasisResponse, from int64, to int64,
 	basisPriceType string, id string) {
 	if basisPriceType == "" {
@@ -174,18 +147,4 @@ func (wsIx *WSIndexClient) ReqBasis(contractCode string, period string, callback
 	jdata, _ := json.Marshal(reqData)
 
 	wsIx.req(jdata, ch, callbackFun, reflect.TypeOf(index.ReqBasisResponse{}))
-}
-
-func (wsIx *WSIndexClient) UnreqBasis(contractCode string, period string, from int64, to int64, basisPriceType string, id string) {
-	if basisPriceType == "" {
-		basisPriceType = "open"
-	}
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.basis.%s.%s", contractCode, period, basisPriceType)
-	unreqData := wsbase.WSUnreqData{Unreq: ch, Id: id, From: from, To: to}
-	jdata, _ := json.Marshal(unreqData)
-
-	wsIx.unreq(jdata, ch)
 }
