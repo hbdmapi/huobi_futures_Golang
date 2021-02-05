@@ -45,7 +45,7 @@ func TestTriggerOrderClient_PlaceOrderAsync(t *testing.T) {
 func TestTriggerOrderClient_IsolatedCancelOrderAsync(t *testing.T) {
 	data := make(chan responsetriggerorder.CancelOrderResponse)
 
-	go todClient.IsolatedCancelOrderAsync(data, "XRP-USDT", "")
+	go todClient.IsolatedCancelOrderAsync(data, "XRP-USDT", "", "close", "buy")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -58,7 +58,7 @@ func TestTriggerOrderClient_IsolatedCancelOrderAsync(t *testing.T) {
 func TestTriggerOrderClient_CrossCancelOrderAsync(t *testing.T) {
 	data := make(chan responsetriggerorder.CancelOrderResponse)
 
-	go todClient.CrossCancelOrderAsync(data, "XRP-USDT", "")
+	go todClient.CrossCancelOrderAsync(data, "XRP-USDT", "", "close", "buy")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -71,7 +71,7 @@ func TestTriggerOrderClient_CrossCancelOrderAsync(t *testing.T) {
 func TestTriggerOrderClient_IsolatedGetOpenOrderAsync(t *testing.T) {
 	data := make(chan responsetriggerorder.GetOpenOrderResponse)
 
-	go todClient.IsolatedGetOpenOrderAsync(data, "XRP-USDT", 1, 10)
+	go todClient.IsolatedGetOpenOrderAsync(data, "XRP-USDT", 1, 10, 1)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -84,7 +84,7 @@ func TestTriggerOrderClient_IsolatedGetOpenOrderAsync(t *testing.T) {
 func TestTriggerOrderClient_CrossGetOpenOrderAsync(t *testing.T) {
 	data := make(chan responsetriggerorder.GetOpenOrderResponse)
 
-	go todClient.CrossGetOpenOrderAsync(data, "XRP-USDT", 1, 10)
+	go todClient.CrossGetOpenOrderAsync(data, "XRP-USDT", 1, 10, 1)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -147,7 +147,7 @@ func TestTriggerOrderClient_TpslOrderAsync(t *testing.T) {
 func TestTriggerOrderClient_TpslCancelAsync(t *testing.T) {
 	data := make(chan responsetriggerorder.CancelOrderResponse)
 
-	go todClient.IsolatedTpslCancelAsync(data, "ADA-USDT", "")
+	go todClient.IsolatedTpslCancelAsync(data, "XRP-USDT", "", "buy")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -156,7 +156,7 @@ func TestTriggerOrderClient_TpslCancelAsync(t *testing.T) {
 		t.Log(x)
 	}
 
-	go todClient.CrossTpslCancelAsync(data, "ADA-USDT", "")
+	go todClient.CrossTpslCancelAsync(data, "XRP-USDT", "", "buy")
 	x, ok = <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -169,7 +169,7 @@ func TestTriggerOrderClient_TpslCancelAsync(t *testing.T) {
 func TestTriggerOrderClient_GetTpslOpenOrderAsync(t *testing.T) {
 	data := make(chan responsetriggerorder.GetOpenOrderResponse)
 
-	go todClient.IsolatedGetTpslOpenOrderAsync(data, "ADA-USDT", 0, 0)
+	go todClient.IsolatedGetTpslOpenOrderAsync(data, "XRP-USDT", 0, 0, 3)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -178,7 +178,7 @@ func TestTriggerOrderClient_GetTpslOpenOrderAsync(t *testing.T) {
 		t.Log(x)
 	}
 
-	go todClient.CrossGetTpslOpenOrderAsync(data, "ADA-USDT", 0, 0)
+	go todClient.CrossGetTpslOpenOrderAsync(data, "XRP-USDT", 0, 0, 3)
 	x, ok = <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
