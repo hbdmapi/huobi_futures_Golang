@@ -108,7 +108,9 @@ func (oc *OrderClient) CrossPlaceBatchOrderAsync(data chan responseorder.PlaceBa
 	data <- result
 }
 
-func (oc *OrderClient) IsolatedCancelOrderAsync(data chan responseorder.CancelOrderResponse, contractCode string, orderId string, clientOrderId string) {
+func (oc *OrderClient) IsolatedCancelOrderAsync(data chan responseorder.CancelOrderResponse, contractCode string,
+	orderId string, clientOrderId string, offset string, direction string) {
+
 	// url
 	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cancel", nil)
 	if orderId == "" && clientOrderId == "" {
@@ -122,6 +124,12 @@ func (oc *OrderClient) IsolatedCancelOrderAsync(data chan responseorder.CancelOr
 	}
 	if clientOrderId != "" {
 		content += fmt.Sprintf(",\"client_order_id\": \"%s\"", clientOrderId)
+	}
+	if offset != "" {
+		content += fmt.Sprintf(",\"offset\": \"%s\"", offset)
+	}
+	if direction != "" {
+		content += fmt.Sprintf(",\"direction\": \"%s\"", direction)
 	}
 	if content != "" {
 		content = fmt.Sprintf("{%s}", content[1:])
@@ -139,7 +147,8 @@ func (oc *OrderClient) IsolatedCancelOrderAsync(data chan responseorder.CancelOr
 	data <- result
 }
 
-func (oc *OrderClient) CrossCancelOrderAsync(data chan responseorder.CancelOrderResponse, contractCode string, orderId string, clientOrderId string) {
+func (oc *OrderClient) CrossCancelOrderAsync(data chan responseorder.CancelOrderResponse, contractCode string,
+	orderId string, clientOrderId string, offset string, direction string) {
 	// url
 	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_cancel", nil)
 	if orderId == "" && clientOrderId == "" {
@@ -153,6 +162,12 @@ func (oc *OrderClient) CrossCancelOrderAsync(data chan responseorder.CancelOrder
 	}
 	if clientOrderId != "" {
 		content += fmt.Sprintf(",\"client_order_id\": \"%s\"", clientOrderId)
+	}
+	if offset != "" {
+		content += fmt.Sprintf(",\"offset\": \"%s\"", offset)
+	}
+	if direction != "" {
+		content += fmt.Sprintf(",\"direction\": \"%s\"", direction)
 	}
 	if content != "" {
 		content = fmt.Sprintf("{%s}", content[1:])
@@ -208,7 +223,8 @@ func (oc *OrderClient) CrossSwitchLeverRateAsync(data chan responseorder.SwitchL
 	data <- result
 }
 
-func (oc *OrderClient) IsolatedGetOrderInfoAsync(data chan responseorder.GetOrderInfoResponse, contractCode string, orderId string, clientOrderId string) {
+func (oc *OrderClient) IsolatedGetOrderInfoAsync(data chan responseorder.GetOrderInfoResponse, contractCode string,
+	orderId string, clientOrderId string) {
 	// url
 	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_order_info", nil)
 

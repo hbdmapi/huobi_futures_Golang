@@ -207,6 +207,34 @@ func TestAccountClient_GetAccountTransHisAsync(t *testing.T) {
 	}
 }
 
+func TestAccountClient_IsolatedSettlementRecordsAsync(t *testing.T) {
+
+	data := make(chan account.IsolatedGetSettlementRecordsResponse)
+
+	go acClient.IsolatedGetSettlementRecordsAsync(data, "ETH-USDT", 0, 0, 1, 10)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_CrossSettlementRecordsAsync(t *testing.T) {
+
+	data := make(chan account.CrossGetSettlementRecordsResponse)
+
+	go acClient.CrossGetSettlementRecordsAsync(data, "USDT", 0, 0, 1, 10)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
 func TestAccountClient_IsolatedGetValidLeverRateAsync(t *testing.T) {
 
 	data := make(chan account.GetValidLeverRateResponse)
