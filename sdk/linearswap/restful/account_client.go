@@ -306,6 +306,76 @@ func (ac *AccountClient) GetAccountTransHisAsync(data chan account.GetAccountTra
 	data <- result
 }
 
+func (ac *AccountClient) IsolatedGetSettlementRecordsAsync(data chan account.IsolatedGetSettlementRecordsResponse, contractCode string,
+	startTime int64, endTime int64, pageIndex int, pageSize int) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_user_settlement_records", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
+	if startTime != 0 {
+		content += fmt.Sprintf(",\"start_time\": %d", startTime)
+	}
+	if endTime != 0 {
+		content += fmt.Sprintf(",\"end_time\": %d", endTime)
+	}
+	if pageIndex != 0 {
+		content += fmt.Sprintf(",\"page_index\": %d", pageIndex)
+	}
+	if pageSize != 0 {
+		content += fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.IsolatedGetSettlementRecordsResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to IsolatedGetSettlementRecordsResponse error: %s", jsonErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) CrossGetSettlementRecordsAsync(data chan account.CrossGetSettlementRecordsResponse, marginAccount string,
+	startTime int64, endTime int64, pageIndex int, pageSize int) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_user_settlement_records", nil)
+
+	// content
+	content := fmt.Sprintf(",\"margin_account\": \"%s\"", marginAccount)
+	if startTime != 0 {
+		content += fmt.Sprintf(",\"start_time\": %d", startTime)
+	}
+	if endTime != 0 {
+		content += fmt.Sprintf(",\"end_time\": %d", endTime)
+	}
+	if pageIndex != 0 {
+		content += fmt.Sprintf(",\"page_index\": %d", pageIndex)
+	}
+	if pageSize != 0 {
+		content += fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.CrossGetSettlementRecordsResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to CrossGetSettlementRecordsResponse error: %s", jsonErr)
+	}
+	data <- result
+}
+
 func (ac *AccountClient) IsolatedGetValidLeverRateAsync(data chan account.GetValidLeverRateResponse, contractCode string) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_available_level_rate", nil)
