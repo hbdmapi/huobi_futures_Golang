@@ -76,6 +76,8 @@ type GetOrderDetailResponse struct {
 
 		IsTpsl int `json:"is_tpsl"`
 
+		RealProfit float32 `json:"real_profit"`
+
 		Trades []struct {
 			Id string `json:"id"`
 
@@ -92,6 +94,10 @@ type GetOrderDetailResponse struct {
 			Role string `json:"role"`
 
 			CreatedAt int64 `json:"created_at"`
+
+			RealProfit float32 `json:"real_profit"`
+
+			Profit float32 `json:"profit"`
 		} `json:"trades,omitempty"`
 	} `json:"data,omitempty"`
 

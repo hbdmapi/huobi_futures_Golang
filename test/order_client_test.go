@@ -79,7 +79,7 @@ func TestOrderClient_CrossPlaceBatchOrderAsync(t *testing.T) {
 func TestOrderClient_IsolatedCancelOrderAsync(t *testing.T) {
 	data := make(chan responseorder.CancelOrderResponse)
 
-	go odClient.IsolatedCancelOrderAsync(data, "XRP-USDT", "779039570666164224", "")
+	go odClient.IsolatedCancelOrderAsync(data, "XRP-USDT", "779039570666164224", "", "open", "buy")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -88,7 +88,7 @@ func TestOrderClient_IsolatedCancelOrderAsync(t *testing.T) {
 		t.Log(x)
 	}
 
-	go odClient.IsolatedCancelOrderAsync(data, "XRP-USDT", "", "")
+	go odClient.IsolatedCancelOrderAsync(data, "XRP-USDT", "", "", "open", "buy")
 	x, ok = <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -101,7 +101,7 @@ func TestOrderClient_IsolatedCancelOrderAsync(t *testing.T) {
 func TestOrderClient_CrossCancelOrderAsync(t *testing.T) {
 	data := make(chan responseorder.CancelOrderResponse)
 
-	go odClient.CrossCancelOrderAsync(data, "XRP-USDT", "779039570666164224", "")
+	go odClient.CrossCancelOrderAsync(data, "XRP-USDT", "779039570666164224", "", "open", "buy")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -110,7 +110,7 @@ func TestOrderClient_CrossCancelOrderAsync(t *testing.T) {
 		t.Log(x)
 	}
 
-	go odClient.CrossCancelOrderAsync(data, "XRP-USDT", "", "")
+	go odClient.CrossCancelOrderAsync(data, "XRP-USDT", "", "", "open", "buy")
 	x, ok = <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -149,7 +149,7 @@ func TestOrderClient_CrossSwitchLeverRateAsync(t *testing.T) {
 func TestOrderClient_IsolatedGetOrderInfoAsync(t *testing.T) {
 	data := make(chan responseorder.GetOrderInfoResponse)
 
-	go odClient.IsolatedGetOrderInfoAsync(data, "XRP-USDT", "788764775151648768", "")
+	go odClient.IsolatedGetOrderInfoAsync(data, "XRP-USDT", "807205230369931264,807205439699243008", "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -162,7 +162,7 @@ func TestOrderClient_IsolatedGetOrderInfoAsync(t *testing.T) {
 func TestOrderClient_CrossGetOrderInfoAsync(t *testing.T) {
 	data := make(chan responseorder.GetOrderInfoResponse)
 
-	go odClient.CrossGetOrderInfoAsync(data, "XRP-USDT", "798855736238379008,798858712306499584", "")
+	go odClient.CrossGetOrderInfoAsync(data, "XRP-USDT", "807205230369931264,807205439699243008", "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -175,7 +175,7 @@ func TestOrderClient_CrossGetOrderInfoAsync(t *testing.T) {
 func TestOrderClient_IsolatedGetOrderDetailAsync(t *testing.T) {
 	data := make(chan responseorder.GetOrderDetailResponse)
 
-	go odClient.IsolatedGetOrderDetailAsync(data, "XRP-USDT", 788764775151648768, 1608097776939, 1, 1, 10)
+	go odClient.IsolatedGetOrderDetailAsync(data, "XRP-USDT", 807205230369931264, 0, 1, 1, 10)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -188,7 +188,7 @@ func TestOrderClient_IsolatedGetOrderDetailAsync(t *testing.T) {
 func TestOrderClient_CrossGetOrderDetailAsync(t *testing.T) {
 	data := make(chan responseorder.GetOrderDetailResponse)
 
-	go odClient.CrossGetOrderDetailAsync(data, "XRP-USDT", 798855736238379008, 0, 1, 1, 10)
+	go odClient.CrossGetOrderDetailAsync(data, "XRP-USDT", 807205439699243008, 0, 1, 1, 10)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -201,7 +201,7 @@ func TestOrderClient_CrossGetOrderDetailAsync(t *testing.T) {
 func TestOrderClient_IsolatedGetOpenOrderAsync(t *testing.T) {
 	data := make(chan responseorder.GetOpenOrderResponse)
 
-	go odClient.IsolatedGetOpenOrderAsync(data, "XRP-USDT", 1, 10)
+	go odClient.IsolatedGetOpenOrderAsync(data, "XRP-USDT", 1, 10, "created_at", 2)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -214,7 +214,7 @@ func TestOrderClient_IsolatedGetOpenOrderAsync(t *testing.T) {
 func TestOrderClient_CrossGetOpenOrderAsync(t *testing.T) {
 	data := make(chan responseorder.GetOpenOrderResponse)
 
-	go odClient.CrossGetOpenOrderAsync(data, "XRP-USDT", 1, 10)
+	go odClient.CrossGetOpenOrderAsync(data, "XRP-USDT", 1, 10, "created_at", 2)
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -227,7 +227,7 @@ func TestOrderClient_CrossGetOpenOrderAsync(t *testing.T) {
 func TestOrderClient_IsolatedGetHisOrderAsync(t *testing.T) {
 	data := make(chan responseorder.GetHisOrderResponse)
 
-	go odClient.IsolatedGetHisOrderAsync(data, "ADA-USDT", 0, 1, "0", 5, 1, 20, "")
+	go odClient.IsolatedGetHisOrderAsync(data, "XRP-USDT", 0, 1, "0", 90, 1, 20, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -240,7 +240,7 @@ func TestOrderClient_IsolatedGetHisOrderAsync(t *testing.T) {
 func TestOrderClient_CrossGetHisOrderAsync(t *testing.T) {
 	data := make(chan responseorder.GetHisOrderResponse)
 
-	go odClient.CrossGetHisOrderAsync(data, "XRP-USDT", 0, 1, "0", 5, 1, 20, "")
+	go odClient.CrossGetHisOrderAsync(data, "XRP-USDT", 0, 1, "0", 90, 1, 20, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)

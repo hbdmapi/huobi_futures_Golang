@@ -64,6 +64,10 @@ type GetOpenOrderResponse struct {
 			MarginAccount string `json:"margin_account"`
 
 			IsTpsl int `json:"is_tpsl"`
+
+			UpdateTime int64 `json:"update_time"`
+
+			RealProfit float32 `json:"real_profit"`
 		} `json:"orders"`
 
 		TotalPage int `json:"total_page"`

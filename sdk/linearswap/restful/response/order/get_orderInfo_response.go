@@ -63,6 +63,8 @@ type GetOrderInfoResponse struct {
 		MarginAccount string `json:"margin_account"`
 
 		IsTpsl int `json:"is_tpsl"`
+
+		RealProfit float32 `json:"real_profit"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`

@@ -16,7 +16,7 @@ type CancelOrderResponse struct {
 			ErrorMessage string `json:"err_msg"`
 		} `json:"errors,omitempty"`
 
-		Success string `json:"success,omitempty"`
+		Successes string `json:"successes,omitempty"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`
