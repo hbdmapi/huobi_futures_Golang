@@ -247,10 +247,10 @@ func (wsOp *WebSocketOp) handleSubCallbackFun(ch string, data string, jdata map[
 
 	if _, found := wsOp.onSubCallbackFuns[ch]; found {
 		mi = wsOp.onSubCallbackFuns[ch]
-
-	} else if ch == "accounts" || ch == "positions" {
-		//contract_code := jdata["data"][0]["contract_code"], &contract_code)
-		contract_code := jdata["data"]
+	} else if ch == "accounts" || ch == "positions" { // isolated
+		data_array := jdata["data"].([]interface{})
+		contract_code := data_array[0].(map[string]interface{})["contract_code"].(string)
+		contract_code = strings.ToLower(contract_code)
 
 		full_ch := fmt.Sprintf("%s.%s", ch, contract_code)
 		if _, found := wsOp.onSubCallbackFuns[full_ch]; found {
@@ -258,22 +258,63 @@ func (wsOp *WebSocketOp) handleSubCallbackFun(ch string, data string, jdata map[
 		} else if _, found := wsOp.onSubCallbackFuns[fmt.Sprintf("%s.*", ch)]; found {
 			mi = wsOp.onSubCallbackFuns[fmt.Sprintf("%s.*", ch)]
 		}
-	} else if ch[:7] == "orders." {
+	} else if strings.HasPrefix(ch, "orders.") {
 		if _, found := wsOp.onSubCallbackFuns["orders.*"]; found {
 			mi = wsOp.onSubCallbackFuns["orders.*"]
 		}
-	} else if ch[:12] == "matchorders." {
+	} else if strings.HasPrefix(ch, "matchorders.") {
 		if _, found := wsOp.onSubCallbackFuns["matchorders.*"]; found {
 			mi = wsOp.onSubCallbackFuns["matchorders.*"]
 		}
-	} else if ch[:14] == "trigger_order." {
+	} else if strings.HasPrefix(ch, "trigger_order.") {
 		if _, found := wsOp.onSubCallbackFuns["trigger_order.*"]; found {
 			mi = wsOp.onSubCallbackFuns["trigger_order.*"]
 		}
-	} else if ch[len(ch)-19:] == ".liquidation_orders" {
-		if _, found := wsOp.onSubCallbackFuns["public.*.liquidation_orders"]; found {
+	} else if ch == "accounts_cross" { // isolated
+		data_array := jdata["data"].([]interface{})
+		margin_account := data_array[0].(map[string]interface{})["margin_account"].(string)
+		margin_account = strings.ToLower(margin_account)
 
+		full_ch := fmt.Sprintf("%s.%s", ch, margin_account)
+		if _, found := wsOp.onSubCallbackFuns[full_ch]; found {
+			mi = wsOp.onSubCallbackFuns[full_ch]
+		} else if _, found := wsOp.onSubCallbackFuns[fmt.Sprintf("%s.*", ch)]; found {
+			mi = wsOp.onSubCallbackFuns[fmt.Sprintf("%s.*", ch)]
+		}
+	} else if ch == "positions_cross" {
+		data_array := jdata["data"].([]interface{})
+		contract_code := data_array[0].(map[string]interface{})["contract_code"].(string)
+		contract_code = strings.ToLower(contract_code)
+
+		full_ch := fmt.Sprintf("%s.%s", ch, contract_code)
+		if _, found := wsOp.onSubCallbackFuns[full_ch]; found {
+			mi = wsOp.onSubCallbackFuns[full_ch]
+		} else if _, found := wsOp.onSubCallbackFuns[fmt.Sprintf("%s.*", ch)]; found {
+			mi = wsOp.onSubCallbackFuns[fmt.Sprintf("%s.*", ch)]
+		}
+	} else if strings.HasPrefix(ch, "orders_cross.") {
+		if _, found := wsOp.onSubCallbackFuns["orders_cross.*"]; found {
+			mi = wsOp.onSubCallbackFuns["orders_cross.*"]
+		}
+	} else if strings.HasPrefix(ch, "matchorders_cross.") {
+		if _, found := wsOp.onSubCallbackFuns["matchorders_cross.*"]; found {
+			mi = wsOp.onSubCallbackFuns["matchorders_cross.*"]
+		}
+	} else if strings.HasPrefix(ch, "trigger_order_cross.") {
+		if _, found := wsOp.onSubCallbackFuns["trigger_order_cross.*"]; found {
+			mi = wsOp.onSubCallbackFuns["trigger_order_cross.*"]
+		}
+	} else if strings.HasSuffix(ch, ".liquidation_orders") { // General
+		if _, found := wsOp.onSubCallbackFuns["public.*.liquidation_orders"]; found {
 			mi = wsOp.onSubCallbackFuns["public.*.liquidation_orders"]
+		}
+	} else if strings.HasSuffix(ch, ".funding_rate") {
+		if _, found := wsOp.onSubCallbackFuns["public.*.funding_rate"]; found {
+			mi = wsOp.onSubCallbackFuns["public.*.funding_rate"]
+		}
+	} else if strings.HasSuffix(ch, ".contract_info") {
+		if _, found := wsOp.onSubCallbackFuns["public.*.contract_info"]; found {
+			mi = wsOp.onSubCallbackFuns["public.*.contract_info"]
 		}
 	}
 
@@ -343,6 +384,7 @@ func (wsOp *WebSocketOp) unsub(unsubStr []byte, ch string) bool {
 	for !wsOp.authOk {
 		time.Sleep(10)
 	}
+	ch = strings.ToLower(ch)
 
 	if _, found := wsOp.onSubCallbackFuns[ch]; !found {
 		return true
@@ -367,6 +409,7 @@ func (wsOp *WebSocketOp) req(subStr []byte, ch string, fun interface{}, param re
 	for !wsOp.authOk {
 		time.Sleep(10)
 	}
+	ch = strings.ToLower(ch)
 
 	var mi *MethonInfo = nil
 	var found bool
@@ -389,6 +432,7 @@ func (wsOp *WebSocketOp) unreq(unsubStr []byte, ch string) bool {
 	for !wsOp.authOk {
 		time.Sleep(10)
 	}
+	ch = strings.ToLower(ch)
 
 	if _, found := wsOp.onReqCallbackFuns[ch]; !found {
 		return true

@@ -59,7 +59,13 @@ type SubOrdersResponse struct {
 
 	FeeAsset string `json:"fee_asset"`
 
+	MarginAccount string `json:"margin_account"`
+
+	MarginMode string `json:"margin_mode"`
+
 	IsTpsl int `json:"is_tpsl"`
+
+	RealProfit float32 `json:"real_profit"`
 
 	Trade []struct {
 		Id string `json:"id"`
@@ -79,5 +85,9 @@ type SubOrdersResponse struct {
 		Role string `json:"role"`
 
 		FeeAsset string `json:"fee_asset"`
+
+		Profit float32 `json:"profit"`
+
+		RealProfit float32 `json:"real_profit"`
 	} `json:"trade"`
 }

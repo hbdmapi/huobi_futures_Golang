@@ -10,42 +10,54 @@ import (
 var wsnfClient *ws.WSNotifyClient
 
 func init() {
-	//wsnfClient = new(ws.WSNotifyClient).Init(config.AccessKey, config.SecretKey, "")
+	wsnfClient = new(ws.WSNotifyClient).Init(config.AccessKey, config.SecretKey, "")
 }
 
 func TestWSNotifyClient_SubOrders(t *testing.T) {
-	wsnfClient.SubOrders("*", func(m *notify.SubOrdersResponse) {
+	wsnfClient.IsolatedSubOrders("*", func(m *notify.SubOrdersResponse) {
 		t.Log(*m)
 	}, "")
-	time.Sleep(time.Duration(50) * time.Second)
-	wsnfClient.UnsubOrders("*", "")
+	wsnfClient.CrossSubOrders("*", func(m *notify.SubOrdersResponse) {
+		t.Log(*m)
+	}, "")
+	time.Sleep(time.Duration(500) * time.Second)
+	wsnfClient.IsolatedUnsubOrders("*", "")
 	time.Sleep(time.Duration(50) * time.Second)
 }
 
 func TestWSNotifyClient_SubAcounts(t *testing.T) {
-	wsnfClient.SubAcounts("*", func(m *notify.SubAccountsResponse) {
+	wsnfClient.IsolatedSubAcounts("*", func(m *notify.SubAccountsResponse) {
+		t.Log(*m)
+	}, "")
+	wsnfClient.CrossSubAcounts("*", func(m *notify.SubAccountsResponse) {
 		t.Log(*m)
 	}, "")
 	time.Sleep(time.Duration(50) * time.Second)
-	wsnfClient.UnsubAccounts("*", "")
+	wsnfClient.IsolatedUnsubAccounts("*", "")
 	time.Sleep(time.Duration(50) * time.Second)
 }
 
 func TestWSNotifyClient_SubPositions(t *testing.T) {
-	wsnfClient.SubPositions("*", func(m *notify.SubPositionsResponse) {
+	wsnfClient.IsolatedSubPositions("xrp-usdt", func(m *notify.SubPositionsResponse) {
+		t.Log(*m)
+	}, "")
+	wsnfClient.CrossSubPositions("xrp-usdt", func(m *notify.SubPositionsResponse) {
 		t.Log(*m)
 	}, "")
 	time.Sleep(time.Duration(50) * time.Second)
-	wsnfClient.UnsubPositions("*", "")
+	wsnfClient.IsolatdUnsubPositions("*", "")
 	time.Sleep(time.Duration(50) * time.Second)
 }
 
 func TestWSNotifyClient_SubMatchOrders(t *testing.T) {
-	wsnfClient.SubMatchOrders("*", func(m *notify.SubOrdersResponse) {
+	wsnfClient.IsolatedSubMatchOrders("*", func(m *notify.SubOrdersResponse) {
 		t.Log(*m)
 	}, "")
-	time.Sleep(time.Duration(50) * time.Second)
-	wsnfClient.UnsubMathOrders("*", "")
+	wsnfClient.CrossSubMatchOrders("*", func(m *notify.SubOrdersResponse) {
+		t.Log(*m)
+	}, "")
+	time.Sleep(time.Duration(500) * time.Second)
+	wsnfClient.IsolatedUnsubMathOrders("*", "")
 	time.Sleep(time.Duration(50) * time.Second)
 }
 
@@ -77,10 +89,13 @@ func TestWSNotifyClient_SubContractInfo(t *testing.T) {
 }
 
 func TestWSNotifyClient_SubTriggerOrder(t *testing.T) {
-	wsnfClient.SubTriggerOrder("*", func(m *notify.SubTriggerOrderResponse) {
+	wsnfClient.IsolatedSubTriggerOrder("*", func(m *notify.SubTriggerOrderResponse) {
+		t.Log(*m)
+	}, "")
+	wsnfClient.CrossSubTriggerOrder("*", func(m *notify.SubTriggerOrderResponse) {
 		t.Log(*m)
 	}, "")
 	time.Sleep(time.Duration(100) * time.Second)
-	wsnfClient.UnsubTriggerOrder("*", "")
+	wsnfClient.IsolatedUnsubTriggerOrder("*", "")
 	time.Sleep(time.Duration(100) * time.Second)
 }

@@ -41,5 +41,9 @@ type SubPositionsResponse struct {
 		LastPrice float32 `json:"last_price"`
 
 		MarginAsset string `json:"margin_asset"`
+
+		MarginAccount string `json:"margin_account"`
+
+		MarginMode string `json:"margin_mode"`
 	} `json:"data"`
 }

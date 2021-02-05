@@ -27,7 +27,7 @@ func (wsNf *WSNotifyClient) Init(accessKey string, secretKey string, host string
 
 type OnSubOrdersResponse func(*notify.SubOrdersResponse)
 
-func (wsNf *WSNotifyClient) SubOrders(contractCode string, callbackFun OnSubOrdersResponse, cid string) {
+func (wsNf *WSNotifyClient) IsolatedSubOrders(contractCode string, callbackFun OnSubOrdersResponse, cid string) {
 	if cid == "" {
 		cid = linearswap.DEFAULT_CID
 	}
@@ -38,12 +38,35 @@ func (wsNf *WSNotifyClient) SubOrders(contractCode string, callbackFun OnSubOrde
 	wsNf.sub(jdata, ch, callbackFun, reflect.TypeOf(notify.SubOrdersResponse{}))
 }
 
-func (wsNf *WSNotifyClient) UnsubOrders(contractCode string, cid string) {
+func (wsNf *WSNotifyClient) IsolatedUnsubOrders(contractCode string, cid string) {
 	if cid == "" {
 		cid = linearswap.DEFAULT_CID
 	}
 
 	ch := fmt.Sprintf("orders.%s", contractCode)
+	opData := wsbase.WSOpData{Op: "unsub", Cid: cid, Topic: ch}
+	jdata, _ := json.Marshal(opData)
+
+	wsNf.unsub(jdata, ch)
+}
+
+func (wsNf *WSNotifyClient) CrossSubOrders(contractCode string, callbackFun OnSubOrdersResponse, cid string) {
+	if cid == "" {
+		cid = linearswap.DEFAULT_CID
+	}
+	ch := fmt.Sprintf("orders_cross.%s", contractCode)
+	opData := wsbase.WSOpData{Op: "sub", Topic: ch}
+	jdata, _ := json.Marshal(opData)
+
+	wsNf.sub(jdata, ch, callbackFun, reflect.TypeOf(notify.SubOrdersResponse{}))
+}
+
+func (wsNf *WSNotifyClient) CrossUnsubOrders(contractCode string, cid string) {
+	if cid == "" {
+		cid = linearswap.DEFAULT_CID
+	}
+
+	ch := fmt.Sprintf("orders_cross.%s", contractCode)
 	opData := wsbase.WSOpData{Op: "unsub", Cid: cid, Topic: ch}
 	jdata, _ := json.Marshal(opData)
 
@@ -58,7 +81,7 @@ func (wsNf *WSNotifyClient) UnsubOrders(contractCode string, cid string) {
 
 type OnSubAccountsResponse func(*notify.SubAccountsResponse)
 
-func (wsNf *WSNotifyClient) SubAcounts(contractCode string, callbackFun OnSubAccountsResponse, cid string) {
+func (wsNf *WSNotifyClient) IsolatedSubAcounts(contractCode string, callbackFun OnSubAccountsResponse, cid string) {
 	if cid == "" {
 		cid = linearswap.DEFAULT_CID
 	}
@@ -70,12 +93,36 @@ func (wsNf *WSNotifyClient) SubAcounts(contractCode string, callbackFun OnSubAcc
 	wsNf.sub(jdata, ch, callbackFun, reflect.TypeOf(notify.SubAccountsResponse{}))
 }
 
-func (wsNf *WSNotifyClient) UnsubAccounts(contractCode string, cid string) {
+func (wsNf *WSNotifyClient) IsolatedUnsubAccounts(contractCode string, cid string) {
 	if cid == "" {
 		cid = linearswap.DEFAULT_CID
 	}
 
 	ch := fmt.Sprintf("accounts.%s", contractCode)
+	opData := wsbase.WSOpData{Op: "unsub", Cid: cid, Topic: ch}
+	jdata, _ := json.Marshal(opData)
+
+	wsNf.unsub(jdata, ch)
+}
+
+func (wsNf *WSNotifyClient) CrossSubAcounts(contractCode string, callbackFun OnSubAccountsResponse, cid string) {
+	if cid == "" {
+		cid = linearswap.DEFAULT_CID
+	}
+
+	ch := fmt.Sprintf("accounts_cross.%s", contractCode)
+	opData := wsbase.WSOpData{Op: "sub", Cid: cid, Topic: ch}
+	jdata, _ := json.Marshal(opData)
+
+	wsNf.sub(jdata, ch, callbackFun, reflect.TypeOf(notify.SubAccountsResponse{}))
+}
+
+func (wsNf *WSNotifyClient) CrossUnsubAccounts(marginAccount string, cid string) {
+	if cid == "" {
+		cid = linearswap.DEFAULT_CID
+	}
+
+	ch := fmt.Sprintf("accounts_cross.%s", marginAccount)
 	opData := wsbase.WSOpData{Op: "unsub", Cid: cid, Topic: ch}
 	jdata, _ := json.Marshal(opData)
 
@@ -90,7 +137,7 @@ func (wsNf *WSNotifyClient) UnsubAccounts(contractCode string, cid string) {
 
 type OnSubPositionsResponse func(*notify.SubPositionsResponse)
 
-func (wsNf *WSNotifyClient) SubPositions(contractCode string, callbackFun OnSubPositionsResponse, cid string) {
+func (wsNf *WSNotifyClient) IsolatedSubPositions(contractCode string, callbackFun OnSubPositionsResponse, cid string) {
 	if cid == "" {
 		cid = linearswap.DEFAULT_CID
 	}
@@ -102,12 +149,36 @@ func (wsNf *WSNotifyClient) SubPositions(contractCode string, callbackFun OnSubP
 	wsNf.sub(jdata, ch, callbackFun, reflect.TypeOf(notify.SubPositionsResponse{}))
 }
 
-func (wsNf *WSNotifyClient) UnsubPositions(contractCode string, cid string) {
+func (wsNf *WSNotifyClient) IsolatdUnsubPositions(contractCode string, cid string) {
 	if cid == "" {
 		cid = linearswap.DEFAULT_CID
 	}
 
 	ch := fmt.Sprintf("positions.%s", contractCode)
+	opData := wsbase.WSOpData{Op: "unsub", Cid: cid, Topic: ch}
+	jdata, _ := json.Marshal(opData)
+
+	wsNf.unsub(jdata, ch)
+}
+
+func (wsNf *WSNotifyClient) CrossSubPositions(contractCode string, callbackFun OnSubPositionsResponse, cid string) {
+	if cid == "" {
+		cid = linearswap.DEFAULT_CID
+	}
+
+	ch := fmt.Sprintf("positions_cross.%s", contractCode)
+	opData := wsbase.WSOpData{Op: "sub", Topic: ch}
+	jdata, _ := json.Marshal(opData)
+
+	wsNf.sub(jdata, ch, callbackFun, reflect.TypeOf(notify.SubPositionsResponse{}))
+}
+
+func (wsNf *WSNotifyClient) CrossUnsubPositions(contractCode string, cid string) {
+	if cid == "" {
+		cid = linearswap.DEFAULT_CID
+	}
+
+	ch := fmt.Sprintf("positions_cross.%s", contractCode)
 	opData := wsbase.WSOpData{Op: "unsub", Cid: cid, Topic: ch}
 	jdata, _ := json.Marshal(opData)
 
@@ -122,7 +193,7 @@ func (wsNf *WSNotifyClient) UnsubPositions(contractCode string, cid string) {
 
 type OnSubMatchOrdersResponse func(*notify.SubOrdersResponse)
 
-func (wsNf *WSNotifyClient) SubMatchOrders(contractCode string, callbackFun OnSubMatchOrdersResponse, cid string) {
+func (wsNf *WSNotifyClient) IsolatedSubMatchOrders(contractCode string, callbackFun OnSubMatchOrdersResponse, cid string) {
 	if cid == "" {
 		cid = linearswap.DEFAULT_CID
 	}
@@ -135,13 +206,39 @@ func (wsNf *WSNotifyClient) SubMatchOrders(contractCode string, callbackFun OnSu
 	wsNf.sub(jdata, ch, callbackFun, reflect.TypeOf(notify.SubOrdersResponse{}))
 }
 
-func (wsNf *WSNotifyClient) UnsubMathOrders(contractCode string, cid string) {
+func (wsNf *WSNotifyClient) IsolatedUnsubMathOrders(contractCode string, cid string) {
 	if cid == "" {
 		cid = linearswap.DEFAULT_CID
 	}
 
 	contractCode = strings.ToLower(contractCode)
 	ch := fmt.Sprintf("matchOrders.%s", contractCode)
+	opData := wsbase.WSOpData{Op: "unsub", Cid: cid, Topic: ch}
+	jdata, _ := json.Marshal(opData)
+
+	wsNf.unsub(jdata, ch)
+}
+
+func (wsNf *WSNotifyClient) CrossSubMatchOrders(contractCode string, callbackFun OnSubMatchOrdersResponse, cid string) {
+	if cid == "" {
+		cid = linearswap.DEFAULT_CID
+	}
+
+	contractCode = strings.ToLower(contractCode)
+	ch := fmt.Sprintf("matchOrders_cross.%s", contractCode)
+	opData := wsbase.WSOpData{Op: "sub", Cid: cid, Topic: ch}
+	jdata, _ := json.Marshal(opData)
+
+	wsNf.sub(jdata, ch, callbackFun, reflect.TypeOf(notify.SubOrdersResponse{}))
+}
+
+func (wsNf *WSNotifyClient) CrossUnsubMathOrders(contractCode string, cid string) {
+	if cid == "" {
+		cid = linearswap.DEFAULT_CID
+	}
+
+	contractCode = strings.ToLower(contractCode)
+	ch := fmt.Sprintf("matchOrders_cross.%s", contractCode)
 	opData := wsbase.WSOpData{Op: "unsub", Cid: cid, Topic: ch}
 	jdata, _ := json.Marshal(opData)
 
@@ -252,7 +349,7 @@ func (wsNf *WSNotifyClient) UnsubContractInfo(contractCode string, cid string) {
 
 type OnSubTriggerOrderResponse func(*notify.SubTriggerOrderResponse)
 
-func (wsNf *WSNotifyClient) SubTriggerOrder(contractCode string, callbackFun OnSubTriggerOrderResponse, cid string) {
+func (wsNf *WSNotifyClient) IsolatedSubTriggerOrder(contractCode string, callbackFun OnSubTriggerOrderResponse, cid string) {
 	if cid == "" {
 		cid = linearswap.DEFAULT_CID
 	}
@@ -264,12 +361,36 @@ func (wsNf *WSNotifyClient) SubTriggerOrder(contractCode string, callbackFun OnS
 	wsNf.sub(jdata, ch, callbackFun, reflect.TypeOf(notify.SubTriggerOrderResponse{}))
 }
 
-func (wsNf *WSNotifyClient) UnsubTriggerOrder(contractCode string, cid string) {
+func (wsNf *WSNotifyClient) IsolatedUnsubTriggerOrder(contractCode string, cid string) {
 	if cid == "" {
 		cid = linearswap.DEFAULT_CID
 	}
 
 	ch := fmt.Sprintf("trigger_order.%s", contractCode)
+	opData := wsbase.WSOpData{Op: "unsub", Cid: cid, Topic: ch}
+	jdata, _ := json.Marshal(opData)
+
+	wsNf.unsub(jdata, ch)
+}
+
+func (wsNf *WSNotifyClient) CrossSubTriggerOrder(contractCode string, callbackFun OnSubTriggerOrderResponse, cid string) {
+	if cid == "" {
+		cid = linearswap.DEFAULT_CID
+	}
+
+	ch := fmt.Sprintf("trigger_order_cross.%s", contractCode)
+	opData := wsbase.WSOpData{Op: "sub", Cid: cid, Topic: ch}
+	jdata, _ := json.Marshal(opData)
+
+	wsNf.sub(jdata, ch, callbackFun, reflect.TypeOf(notify.SubTriggerOrderResponse{}))
+}
+
+func (wsNf *WSNotifyClient) CrossUnsubTriggerOrder(contractCode string, cid string) {
+	if cid == "" {
+		cid = linearswap.DEFAULT_CID
+	}
+
+	ch := fmt.Sprintf("trigger_order_cross.%s", contractCode)
 	opData := wsbase.WSOpData{Op: "unsub", Cid: cid, Topic: ch}
 	jdata, _ := json.Marshal(opData)
 

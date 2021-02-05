@@ -41,5 +41,9 @@ type SubAccountsResponse struct {
 		LeverRate float32 `json:"lever_rate"`
 
 		AdjustFactor float32 `json:"adjust_factor"`
+
+		MarginAccount string `json:"margin_account"`
+
+		MarginMode string `json:"margin_mode"`
 	} `json:"data"`
 }
