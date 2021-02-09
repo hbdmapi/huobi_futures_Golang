@@ -392,6 +392,58 @@ func (mc *MarketClient) GetHisOpenInterestAsync(data chan market.GetHisOpenInter
 	data <- result
 }
 
+func (mc *MarketClient) IsolatedGetLadderMarginAsync(data chan market.GetLadderMarginResponse, contractCode string) {
+	// location
+	location := "/linear-swap-api/v1/swap_ladder_margin"
+
+	// option
+	option := ""
+	if contractCode != "" {
+		option += fmt.Sprintf("?contract_code=%s", contractCode)
+	}
+	if option != "" {
+		location += option
+	}
+
+	url := mc.PUrlBuilder.Build(location, nil)
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := market.GetLadderMarginResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetLadderMarginResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (mc *MarketClient) CrossGetLadderMarginAsync(data chan market.GetLadderMarginResponse, contractCode string) {
+	// location
+	location := "/linear-swap-api/v1/swap_cross_ladder_margin"
+
+	// option
+	option := ""
+	if contractCode != "" {
+		option += fmt.Sprintf("?contract_code=%s", contractCode)
+	}
+	if option != "" {
+		location += option
+	}
+
+	url := mc.PUrlBuilder.Build(location, nil)
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := market.GetLadderMarginResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetLadderMarginResponse error: %s", getErr)
+	}
+	data <- result
+}
+
 func (mc *MarketClient) GetEliteAccountRatioAsync(data chan market.GetEliteRatioResponse, contractCode string, period string) {
 	// location
 	location := fmt.Sprintf("/linear-swap-api/v1/swap_elite_account_ratio?contract_code=%s&period=%s", contractCode, period)
