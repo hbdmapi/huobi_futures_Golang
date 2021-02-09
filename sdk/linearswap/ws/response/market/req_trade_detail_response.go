@@ -19,5 +19,9 @@ type ReqTradeDetailResponse struct {
 		Direction string `json:"direction"`
 
 		Ts int64 `json:"ts"`
+
+		Quantity string `json:"quantity"`
+
+		TradeTurnover string `json:"trade_turnover"`
 	} `json:"data"`
 }

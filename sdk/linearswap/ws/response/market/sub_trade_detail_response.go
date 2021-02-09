@@ -20,6 +20,10 @@ type SubTradeDetailResponse struct {
 			Price float32 `json:"price"`
 
 			Direction string `json:"direction"`
+
+			Quantity float32 `json:"quantity"`
+
+			TradeTurnover float32 `json:"trade_turnover"`
 		} `json:"data"`
 	} `json:"tick"`
 }

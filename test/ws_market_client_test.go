@@ -18,16 +18,12 @@ func TestWSMarketClient_SubKLine(t *testing.T) {
 		t.Log(*m)
 	}, "")
 	time.Sleep(time.Duration(10) * time.Second)
-	wsmkClient.UnsubKLine("BTC-USDT", "15min", "")
-	time.Sleep(time.Duration(10) * time.Second)
 }
 
 func TestWSMarketClient_ReqKLine(t *testing.T) {
 	wsmkClient.ReqKLine("BTC-USDT", "1min", func(m *market.ReqKLineResponse) {
 		t.Log(*m)
 	}, 1604395758, 1604396758, "")
-	time.Sleep(time.Duration(10) * time.Second)
-	wsmkClient.UnreqKLine("BTC-USDT", "1min", "")
 	time.Sleep(time.Duration(10) * time.Second)
 }
 
@@ -36,16 +32,12 @@ func TestWSMarketClient_SubDepth(t *testing.T) {
 		t.Log(*m)
 	}, "")
 	time.Sleep(time.Duration(5) * time.Second)
-	wsmkClient.UnsubDepth("BTC-USDT", "step0", "")
-	time.Sleep(time.Duration(5) * time.Second)
 }
 
 func TestWSMarketClient_SubIncrementalDepth(t *testing.T) {
 	wsmkClient.SubIncrementalDepth("BTC-USDT", "20", func(m *market.SubDepthResponse) {
 		t.Log(*m)
 	}, "")
-	time.Sleep(time.Duration(5) * time.Second)
-	wsmkClient.UnsubIncrementalDepth("BTC-USDT", "20", "")
 	time.Sleep(time.Duration(5) * time.Second)
 }
 
@@ -54,16 +46,12 @@ func TestWSMarketClient_SubDetail(t *testing.T) {
 		t.Log(*m)
 	}, "")
 	time.Sleep(time.Duration(5) * time.Second)
-	wsmkClient.UnsubDetail("BTC-USDT", "")
-	time.Sleep(time.Duration(5) * time.Second)
 }
 
 func TestWSMarketClient_SubBBO(t *testing.T) {
 	wsmkClient.SubBBO("BTC-USDT", func(m *market.SubBBOResponse) {
 		t.Log(*m)
 	}, "")
-	time.Sleep(time.Duration(5) * time.Second)
-	wsmkClient.UnsubBBO("BTC-USDT", "")
 	time.Sleep(time.Duration(5) * time.Second)
 }
 
@@ -72,15 +60,11 @@ func TestWSMarketClient_SubTradeDetail(t *testing.T) {
 		t.Log(*m)
 	}, "")
 	time.Sleep(time.Duration(5) * time.Second)
-	wsmkClient.UnsubTradeDetail("BTC-USDT", "")
-	time.Sleep(time.Duration(5) * time.Second)
 }
 
 func TestWSMarketClient_ReqTradeDetail(t *testing.T) {
 	wsmkClient.ReqTradeDetail("BTC-USDT", func(m *market.ReqTradeDetailResponse) {
 		t.Log(*m)
 	}, "")
-	time.Sleep(time.Duration(5) * time.Second)
-	wsmkClient.UnreqTradeDetail("BTC-USDT", "")
 	time.Sleep(time.Duration(5) * time.Second)
 }

@@ -22,6 +22,10 @@ type GetTradeResponse struct {
 			Price string `json:"price"`
 
 			Ts int64 `json:"ts"`
+
+			Quantity string `json:"quantity"`
+
+			TradeTurnover string `json:"trade_turnover"`
 		} `json:"data"`
 
 		Ts int64 `json:"ts"`

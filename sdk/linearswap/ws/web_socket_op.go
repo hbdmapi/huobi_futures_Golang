@@ -329,6 +329,7 @@ func (wsOp *WebSocketOp) handleSubCallbackFun(ch string, data string, jdata map[
 func (wsOp *WebSocketOp) handleReqCallbackFun(ch string, data string, jdata map[string]interface{}) {
 	var mi *MethonInfo = nil
 	var found bool = false
+	ch = strings.ToLower(ch)
 
 	if mi, found = wsOp.onReqCallbackFuns[ch]; !found {
 		log.Error("no callback function to handle: %s", jdata)

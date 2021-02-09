@@ -37,16 +37,6 @@ func (wsMk *WSMarketClient) SubKLine(contractCode string, period string, callbac
 	wsMk.sub(jdata, ch, callbackFun, reflect.TypeOf(market.SubKLineResponse{}))
 }
 
-func (wsMk *WSMarketClient) UnsubKLine(contractCode string, period string, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.kline.%s", contractCode, period)
-	unsubData := wsbase.WSUnsubData{Unsub: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-	wsMk.unsub(jdata, ch)
-}
-
 func (wsMk *WSMarketClient) ReqKLine(contractCode string, period string, callbackFun OnReqKLineResponse, from int64, to int64, id string) {
 	if id == "" {
 		id = linearswap.DEFAULT_ID
@@ -55,16 +45,6 @@ func (wsMk *WSMarketClient) ReqKLine(contractCode string, period string, callbac
 	subData := wsbase.WSReqData{Req: ch, From: from, To: to, Id: id}
 	jdata, _ := json.Marshal(subData)
 	wsMk.req(jdata, ch, callbackFun, reflect.TypeOf(market.ReqKLineResponse{}))
-}
-
-func (wsMk *WSMarketClient) UnreqKLine(contractCode string, period string, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.kline.%s", contractCode, period)
-	unsubData := wsbase.WSUnreqData{Unreq: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-	wsMk.unreq(jdata, ch)
 }
 
 // kline end
@@ -85,16 +65,6 @@ func (wsMk *WSMarketClient) SubDepth(contractCode string, fcType string, callbac
 	wsMk.sub(jdata, ch, callbackFun, reflect.TypeOf(market.SubDepthResponse{}))
 }
 
-func (wsMk *WSMarketClient) UnsubDepth(contractCode string, fcType string, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.depth.%s", contractCode, fcType)
-	unsubData := wsbase.WSUnsubData{Unsub: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-	wsMk.unsub(jdata, ch)
-}
-
 // depth end
 //-------------------------------------------------------------
 
@@ -109,16 +79,6 @@ func (wsMk *WSMarketClient) SubIncrementalDepth(contractCode string, size string
 	subData := wsbase.WSSubData{Sub: ch, Id: id}
 	jdata, _ := json.Marshal(subData)
 	wsMk.sub(jdata, ch, callbackFun, reflect.TypeOf(market.SubDepthResponse{}))
-}
-
-func (wsMk *WSMarketClient) UnsubIncrementalDepth(contractCode string, size string, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.depth.size_%s.high_freq", contractCode, size)
-	unsubData := wsbase.WSUnsubData{Unsub: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-	wsMk.unsub(jdata, ch)
 }
 
 // incrementa depth end
@@ -138,16 +98,6 @@ func (wsMk *WSMarketClient) SubDetail(contractCode string, callbackFun OnSubDeta
 	wsMk.sub(jdata, ch, callbackFun, reflect.TypeOf(market.SubKLineResponse{}))
 }
 
-func (wsMk *WSMarketClient) UnsubDetail(contractCode string, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.detail", contractCode)
-	unsubData := wsbase.WSUnsubData{Unsub: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-	wsMk.unsub(jdata, ch)
-}
-
 // detail end
 //-------------------------------------------------------------
 
@@ -164,16 +114,6 @@ func (wsMk *WSMarketClient) SubBBO(contractCode string, callbackFun OnSubBBOResp
 	subData := wsbase.WSSubData{Sub: ch, Id: id}
 	jdata, _ := json.Marshal(subData)
 	wsMk.sub(jdata, ch, callbackFun, reflect.TypeOf(market.SubBBOResponse{}))
-}
-
-func (wsMk *WSMarketClient) UnsubBBO(contractCode string, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.bbo", contractCode)
-	unsubData := wsbase.WSUnsubData{Unsub: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-	wsMk.unsub(jdata, ch)
 }
 
 // bbo end
@@ -195,16 +135,6 @@ func (wsMk *WSMarketClient) SubTradeDetail(contractCode string, callbackFun OnSu
 	wsMk.sub(jdata, ch, callbackFun, reflect.TypeOf(market.SubTradeDetailResponse{}))
 }
 
-func (wsMk *WSMarketClient) UnsubTradeDetail(contractCode string, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.trade.detail", contractCode)
-	unsubData := wsbase.WSUnsubData{Unsub: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-	wsMk.unsub(jdata, ch)
-}
-
 func (wsMk *WSMarketClient) ReqTradeDetail(contractCode string, callbackFun OnReqTradeDetailResponse, id string) {
 	if id == "" {
 		id = linearswap.DEFAULT_ID
@@ -213,14 +143,4 @@ func (wsMk *WSMarketClient) ReqTradeDetail(contractCode string, callbackFun OnRe
 	subData := wsbase.WSReqData{Req: ch, Id: id}
 	jdata, _ := json.Marshal(subData)
 	wsMk.req(jdata, ch, callbackFun, reflect.TypeOf(market.ReqTradeDetailResponse{}))
-}
-
-func (wsMk *WSMarketClient) UnreqTradeDetail(contractCode string, id string) {
-	if id == "" {
-		id = linearswap.DEFAULT_ID
-	}
-	ch := fmt.Sprintf("market.%s.trade.detail", contractCode)
-	unsubData := wsbase.WSUnreqData{Unreq: ch, Id: id}
-	jdata, _ := json.Marshal(unsubData)
-	wsMk.unreq(jdata, ch)
 }
