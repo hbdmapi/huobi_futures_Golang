@@ -484,6 +484,94 @@ func (oc *OrderClient) CrossGetHisOrderAsync(data chan responseorder.GetHisOrder
 	data <- result
 }
 
+func (oc *OrderClient) IsolatedGetHisOrderExactAsync(data chan responseorder.GetHisOrderExactResponse, contractCode string,
+	tradeType int, fcType int, status string, orderPriceType string, startTime int64, endTime int64,
+	fromId int64, size int, direct string) {
+
+	// url
+	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_hisorders_exact", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": \"%d\",\"type\": \"%d\",\"status\": \"%s\"", contractCode, tradeType, fcType, status)
+	if orderPriceType != "" {
+		content += fmt.Sprintf(",\"page_index\": \"%s\"", orderPriceType)
+	}
+	if startTime != 0 {
+		content += fmt.Sprintf(",\"start_time\": %d", startTime)
+	}
+	if endTime != 0 {
+		content += fmt.Sprintf(",\"end_time\": %d", endTime)
+	}
+	if fromId != 0 {
+		content += fmt.Sprintf(",\"from_id\": %d", fromId)
+	}
+	if size != 0 {
+		content += fmt.Sprintf(",\"size\": %d", size)
+	}
+	if direct != "" {
+		content += fmt.Sprintf(",\"direct\": \"%s\"", direct)
+	}
+
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responseorder.GetHisOrderExactResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetHisOrderExactResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (oc *OrderClient) CrossGetHisOrderExactAsync(data chan responseorder.GetHisOrderExactResponse, contractCode string,
+	tradeType int, fcType int, status string, orderPriceType string, startTime int64, endTime int64,
+	fromId int64, size int, direct string) {
+
+	// url
+	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_hisorders_exact", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": \"%d\",\"type\": \"%d\",\"status\": \"%s\"", contractCode, tradeType, fcType, status)
+	if orderPriceType != "" {
+		content += fmt.Sprintf(",\"page_index\": \"%s\"", orderPriceType)
+	}
+	if startTime != 0 {
+		content += fmt.Sprintf(",\"start_time\": %d", startTime)
+	}
+	if endTime != 0 {
+		content += fmt.Sprintf(",\"end_time\": %d", endTime)
+	}
+	if fromId != 0 {
+		content += fmt.Sprintf(",\"from_id\": %d", fromId)
+	}
+	if size != 0 {
+		content += fmt.Sprintf(",\"size\": %d", size)
+	}
+	if direct != "" {
+		content += fmt.Sprintf(",\"direct\": \"%s\"", direct)
+	}
+
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responseorder.GetHisOrderExactResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetHisOrderExactResponse error: %s", getErr)
+	}
+	data <- result
+}
+
 func (oc *OrderClient) IsolatedGetHisMatchAsync(data chan responseorder.GetHisMatchResponse, contractCode string, tradeType int, createDate int,
 	pageIndex int, pageSize int) {
 	// url
@@ -538,6 +626,84 @@ func (oc *OrderClient) CrossGetHisMatchAsync(data chan responseorder.GetHisMatch
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
 		log.Error("convert json to GetHisMatchResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (oc *OrderClient) IsolatedGetHisMatchExactAsync(data chan responseorder.GetHisMatchExactResponse, contractCode string,
+	tradeType int, startTime int64, endTime int64, fromId int64, size int, direct string) {
+	// url
+	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_matchresults_exact", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": %d", contractCode, tradeType)
+	if startTime != 0 {
+		content += fmt.Sprintf(",\"start_time\": %d", startTime)
+	}
+	if endTime != 0 {
+		content += fmt.Sprintf(",\"end_time\": %d", endTime)
+	}
+	if fromId != 0 {
+		content += fmt.Sprintf(",\"from_id\": %d", fromId)
+	}
+	if size != 0 {
+		content += fmt.Sprintf(",\"size\": %d", size)
+	}
+	if direct != "" {
+		content += fmt.Sprintf(",\"direct\": \"%s\"", direct)
+	}
+
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responseorder.GetHisMatchExactResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetHisMatchExactResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (oc *OrderClient) CrossGetHisMatchExactAsync(data chan responseorder.GetHisMatchExactResponse, contractCode string,
+	tradeType int, startTime int64, endTime int64, fromId int64, size int, direct string) {
+	// url
+	url := oc.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_matchresults_exact", nil)
+
+	// content
+	content := fmt.Sprintf(",\"contract_code\": \"%s\",\"trade_type\": %d", contractCode, tradeType)
+	if startTime != 0 {
+		content += fmt.Sprintf(",\"start_time\": %d", startTime)
+	}
+	if endTime != 0 {
+		content += fmt.Sprintf(",\"end_time\": %d", endTime)
+	}
+	if fromId != 0 {
+		content += fmt.Sprintf(",\"from_id\": %d", fromId)
+	}
+	if size != 0 {
+		content += fmt.Sprintf(",\"size\": %d", size)
+	}
+	if direct != "" {
+		content += fmt.Sprintf(",\"direct\": \"%s\"", direct)
+	}
+
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := responseorder.GetHisMatchExactResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetHisMatchExactResponse error: %s", getErr)
 	}
 	data <- result
 }

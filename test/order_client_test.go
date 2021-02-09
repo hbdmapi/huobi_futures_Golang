@@ -250,6 +250,32 @@ func TestOrderClient_CrossGetHisOrderAsync(t *testing.T) {
 	}
 }
 
+func TestOrderClient_IsolatedGetHisOrderExactAsync(t *testing.T) {
+	data := make(chan responseorder.GetHisOrderExactResponse)
+
+	go odClient.IsolatedGetHisOrderExactAsync(data, "XRP-USDT", 0, 1, "0", "", 0, 0, 0, 0, "")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestOrderClient_CrossGetHisOrderExactAsync(t *testing.T) {
+	data := make(chan responseorder.GetHisOrderExactResponse)
+
+	go odClient.CrossGetHisOrderExactAsync(data, "XRP-USDT", 0, 1, "0", "", 0, 0, 0, 0, "")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
 func TestOrderClient_IsolatedGetHisMatchAsync(t *testing.T) {
 	data := make(chan responseorder.GetHisMatchResponse)
 
@@ -267,6 +293,32 @@ func TestOrderClient_CrossGetHisMatchAsync(t *testing.T) {
 	data := make(chan responseorder.GetHisMatchResponse)
 
 	go odClient.CrossGetHisMatchAsync(data, "XRP-USDT", 0, 1, 1, 20)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestOrderClient_IsolatedGetHisMatchExactAsync(t *testing.T) {
+	data := make(chan responseorder.GetHisMatchExactResponse)
+
+	go odClient.IsolatedGetHisMatchExactAsync(data, "XRP-USDT", 0, 0, 0, 0, 0, "")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestOrderClient_CrossGetHisMatchExactAsync(t *testing.T) {
+	data := make(chan responseorder.GetHisMatchExactResponse)
+
+	go odClient.CrossGetHisMatchExactAsync(data, "XRP-USDT", 0, 0, 0, 0, 0, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
