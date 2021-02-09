@@ -133,11 +133,25 @@ func TestAccountClient_CrossGetAssetsPositionAsync(t *testing.T) {
 	}
 }
 
-func TestAccountClient_IsolatedGetAccountListAsync(t *testing.T) {
+func TestAccountClient_SetSubAuthAsync(t *testing.T) {
+
+	data := make(chan account.SetSubAuthResponse)
+
+	go acClient.SetSubAuthAsync(data, "167891085", 1)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_IsolatedGetSubAccountListAsync(t *testing.T) {
 
 	data := make(chan account.GetSubAccountListResponse)
 
-	go acClient.IsolatedGetAccountListAsync(data, "BTC-USDT")
+	go acClient.IsolatedGetSubAccountListResponseAsync(data, "BTC-USDT")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -151,8 +165,31 @@ func TestAccountClient_CrossGetAccountListAsync(t *testing.T) {
 
 	data := make(chan account.GetSubAccountListResponse)
 
-	go acClient.CrossGetAccountListAsync(data, "USDT")
+	go acClient.CrossGetSubAccountListAsync(data, "USDT")
 	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_GetSubAccountInfoListAsync(t *testing.T) {
+
+	data := make(chan account.GetSubAccountInfoListResponse)
+
+	go acClient.IsolatedGetSubAccountInfoListAsync(data, "BTC-USDT", 1, 100)
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	go acClient.CrossGetSubAccountInfoListAsync(data, "USDT", 1, 100)
+	x, ok = <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
 		t.Fail()
@@ -199,6 +236,20 @@ func TestAccountClient_GetAccountTransHisAsync(t *testing.T) {
 
 	go acClient.GetAccountTransHisAsync(data, "BTC-USDT", true, "34", 10, 1, 10)
 	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestAccountClient_GetFinancialRecordExactAsync(t *testing.T) {
+
+	data := make(chan account.GetFinancialRecordExactResponse)
+
+	go acClient.GetFinancialRecordExactAsync(data, "BTC-USDT", "BTC-USDT", "", 0, 0, 0, 0, "")
+	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
 		t.Fail()

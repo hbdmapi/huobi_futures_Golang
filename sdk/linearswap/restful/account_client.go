@@ -181,7 +181,26 @@ func (ac *AccountClient) CrossGetAssetsPositionAsync(data chan account.GetAssets
 	data <- result
 }
 
-func (ac *AccountClient) IsolatedGetAccountListAsync(data chan account.GetSubAccountListResponse, contractCode string) {
+func (ac *AccountClient) SetSubAuthAsync(data chan account.SetSubAuthResponse, subUid string, subAuth int) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_sub_auth", nil)
+
+	// content
+	content := fmt.Sprintf("{\"sub_uid\": \"%s\", \"sub_auth\": %d}", subUid, subAuth)
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.SetSubAuthResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to SetSubAuthResponse error: %s", jsonErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) IsolatedGetSubAccountListResponseAsync(data chan account.GetSubAccountListResponse, contractCode string) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_list", nil)
 
@@ -206,7 +225,7 @@ func (ac *AccountClient) IsolatedGetAccountListAsync(data chan account.GetSubAcc
 	data <- result
 }
 
-func (ac *AccountClient) CrossGetAccountListAsync(data chan account.GetSubAccountListResponse, marginAccount string) {
+func (ac *AccountClient) CrossGetSubAccountListAsync(data chan account.GetSubAccountListResponse, marginAccount string) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_account_list", nil)
 
@@ -227,6 +246,70 @@ func (ac *AccountClient) CrossGetAccountListAsync(data chan account.GetSubAccoun
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
 		log.Error("convert json to GetSubAccountListResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) IsolatedGetSubAccountInfoListAsync(data chan account.GetSubAccountInfoListResponse,
+	contractCode string, pageIndex int, pageSize int) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_sub_account_info_list", nil)
+
+	// content
+	content := ""
+	if contractCode != "" {
+		content = fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
+	}
+	if pageIndex != 0 {
+		content = fmt.Sprintf(",\"page_index\": %d", pageIndex)
+	}
+	if pageSize != 0 {
+		content = fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetSubAccountInfoListResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetSubAccountInfoListResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) CrossGetSubAccountInfoListAsync(data chan account.GetSubAccountInfoListResponse,
+	marginAccount string, pageIndex int, pageSize int) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_cross_sub_account_info_list", nil)
+
+	// content
+	content := ""
+	if marginAccount != "" {
+		content = fmt.Sprintf(",\"margin_account\": \"%s\"", marginAccount)
+	}
+	if pageIndex != 0 {
+		content = fmt.Sprintf(",\"page_index\": %d", pageIndex)
+	}
+	if pageSize != 0 {
+		content = fmt.Sprintf(",\"page_size\": %d", pageSize)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetSubAccountInfoListResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetSubAccountInfoListResponse error: %s", getErr)
 	}
 	data <- result
 }
@@ -302,6 +385,50 @@ func (ac *AccountClient) GetAccountTransHisAsync(data chan account.GetAccountTra
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
 		log.Error("convert json to GetAccountTransHisResponse error: %s", jsonErr)
+	}
+	data <- result
+}
+
+func (ac *AccountClient) GetFinancialRecordExactAsync(data chan account.GetFinancialRecordExactResponse, marginAccount string,
+	contractCode string, fcType string, startTime int64, endTime int64, fromId int64, size int, direct string) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_financial_record_exact", nil)
+
+	// content
+	content := fmt.Sprintf(",\"margin_account\": \"%s\"", marginAccount)
+	if contractCode != "" {
+		content += fmt.Sprintf(",\"contract_code\": \"%s\"", contractCode)
+	}
+	if fcType != "" {
+		content += fmt.Sprintf(",\"type\": \"%s\"", fcType)
+	}
+	if startTime != 0 {
+		content += fmt.Sprintf(",\"start_time\": %d", startTime)
+	}
+	if endTime != 0 {
+		content += fmt.Sprintf(",\"end_time\": %d", endTime)
+	}
+	if fromId != 0 {
+		content += fmt.Sprintf(",\"from_id\": %d", fromId)
+	}
+	if size != 0 {
+		content += fmt.Sprintf(",\"size\": %d", size)
+	}
+	if direct != "" {
+		content += fmt.Sprintf(",\"direct\": \"%s\"", direct)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetFinancialRecordExactResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetFinancialRecordExactResponse error: %s", jsonErr)
 	}
 	data <- result
 }
