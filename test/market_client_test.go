@@ -303,6 +303,28 @@ func TestMarketClient_GetHisOpenInterestAsync(t *testing.T) {
 	}
 }
 
+func TestMarketClient_GetLadderMarginAsync(t *testing.T) {
+	data := make(chan market.GetLadderMarginResponse)
+
+	go mkClient.IsolatedGetLadderMarginAsync(data, "BTC-USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+
+	go mkClient.CrossGetLadderMarginAsync(data, "BTC-USDT")
+	x, ok = <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
 func TestMarketClient_GetEliteAccountRatioAsync(t *testing.T) {
 	data := make(chan market.GetEliteRatioResponse)
 

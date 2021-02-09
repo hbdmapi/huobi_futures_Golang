@@ -52,11 +52,9 @@ type GetHisMatchExactResponse struct {
 			OrderSource string `json:"order_source"`
 		} `json:"trades"`
 
-		TotalPage int `json:"total_page"`
+		RemainSize int `json:"remain_size"`
 
-		CurrentPage int `json:"current_page"`
-
-		TotalSize int `json:"total_size"`
+		NextId int64 `json:"next_id,omitempty"`
 	} `json:"data,omitempty"`
 
 	Ts int64 `json:"ts"`
