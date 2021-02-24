@@ -75,7 +75,16 @@ func (mc *MarketClient) GetIndexAsync(data chan market.GetIndexResponse, contrac
 
 func (mc *MarketClient) GetPriceLimitAsync(data chan market.GetPriceLimitResponse, contractCode string) {
 	// location
-	location := fmt.Sprintf("/linear-swap-api/v1/swap_price_limit?contract_code=%s", contractCode)
+	location := "/linear-swap-api/v1/swap_price_limit"
+
+	// option
+	option := ""
+	if contractCode != "" {
+		option += fmt.Sprintf("contract_code=%s", contractCode)
+	}
+	if option != "" {
+		location += fmt.Sprintf("?%s", option)
+	}
 
 	url := mc.PUrlBuilder.Build(location, nil)
 	getResp, getErr := reqbuilder.HttpGet(url)
@@ -227,7 +236,16 @@ func (mc *MarketClient) GetBatchMergedAsync(data chan market.GetBatchMergedRespo
 
 func (mc *MarketClient) GetTradeAsync(data chan market.GetTradeResponse, contractCode string) {
 	// location
-	location := fmt.Sprintf("/linear-swap-ex/market/trade?contract_code=%s", contractCode)
+	location := "/linear-swap-ex/market/trade"
+
+	// option
+	option := ""
+	if contractCode != "" {
+		option += fmt.Sprintf("&contract_code=%s", contractCode)
+	}
+	if option != "" {
+		location += fmt.Sprintf("?%s", option)
+	}
 
 	url := mc.PUrlBuilder.Build(location, nil)
 	getResp, getErr := reqbuilder.HttpGet(url)
@@ -566,6 +584,32 @@ func (mc *MarketClient) GetFundingRateAsync(data chan market.GetFundingRateRespo
 	jsonErr := json.Unmarshal([]byte(getResp), &result)
 	if jsonErr != nil {
 		log.Error("convert json to GetFundingRateResponse error: %s", getErr)
+	}
+	data <- result
+}
+
+func (mc *MarketClient) GetBatchFundingRateAsync(data chan market.GetBatchFundingRateResponse, contractCode string) {
+	// location
+	location := "linear-swap-api/v1/swap_batch_funding_rate"
+
+	// option
+	option := ""
+	if contractCode != "" {
+		option += fmt.Sprintf("?contract_code=%s", contractCode)
+	}
+	if option != "" {
+		location += option
+	}
+
+	url := mc.PUrlBuilder.Build(location, nil)
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := market.GetBatchFundingRateResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetBatchFundingRateResponse error: %s", getErr)
 	}
 	data <- result
 }

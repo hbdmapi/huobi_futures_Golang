@@ -421,6 +421,19 @@ func TestMarketClient_GetFundingRateAsync(t *testing.T) {
 	}
 }
 
+func TestMarketClient_GetBatchFundingRateAsync(t *testing.T) {
+	data := make(chan market.GetBatchFundingRateResponse)
+
+	go mkClient.GetBatchFundingRateAsync(data, "BTC-USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
 func TestMarketClient_GetHisFundingRateAsync(t *testing.T) {
 	data := make(chan market.GetHisFundingRateResponse)
 
