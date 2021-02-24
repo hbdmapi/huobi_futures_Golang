@@ -13,6 +13,20 @@ func init() {
 	acClient.Init(config.AccessKey, config.SecretKey, config.Host)
 }
 
+func TestAccountClient_GetBalanceValuationAsync(t *testing.T) {
+
+	data := make(chan account.GetBalanceValuationResponse)
+
+	go acClient.GetBalanceValuationAsync(data, "USDT")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
 func TestAccountClient_IsolatedGetAccountInfoAsync(t *testing.T) {
 
 	data := make(chan account.GetAccountInfoResponse)

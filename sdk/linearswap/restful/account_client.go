@@ -21,6 +21,31 @@ func (ac *AccountClient) Init(accessKey string, secretKey string, host string) *
 	return ac
 }
 
+func (ac *AccountClient) GetBalanceValuationAsync(data chan account.GetBalanceValuationResponse, valuationAsset string) {
+	// ulr
+	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_balance_valuation", nil)
+
+	// content
+	content := ""
+	if valuationAsset != "" {
+		content = fmt.Sprintf(",\"valuation_asset\": \"%s\"", valuationAsset)
+	}
+	if content != "" {
+		content = fmt.Sprintf("{%s}", content[1:])
+	}
+
+	getResp, getErr := reqbuilder.HttpPost(url, content)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := account.GetBalanceValuationResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetBalanceValuationResponse error: %s", jsonErr)
+	}
+	data <- result
+}
+
 func (ac *AccountClient) IsolatedGetAccountInfoAsync(data chan account.GetAccountInfoResponse, contractCode string, subUid int64) {
 	// ulr
 	url := ac.PUrlBuilder.Build(linearswap.POST_METHOD, "/linear-swap-api/v1/swap_account_info", nil)
