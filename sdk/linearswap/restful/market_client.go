@@ -590,7 +590,7 @@ func (mc *MarketClient) GetFundingRateAsync(data chan market.GetFundingRateRespo
 
 func (mc *MarketClient) GetBatchFundingRateAsync(data chan market.GetBatchFundingRateResponse, contractCode string) {
 	// location
-	location := "linear-swap-api/v1/swap_batch_funding_rate"
+	location := "/linear-swap-api/v1/swap_batch_funding_rate"
 
 	// option
 	option := ""
