@@ -61,7 +61,7 @@ func TestMarketClient_GetIndexAsync(t *testing.T) {
 func TestMarketClient_GetPriceLimitAsync(t *testing.T) {
 	data := make(chan market.GetPriceLimitResponse)
 
-	go mkClient.GetPriceLimitAsync(data, "BTC-USDT")
+	go mkClient.GetPriceLimitAsync(data, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -97,6 +97,19 @@ func TestMarketClient_GetDepthAsync(t *testing.T) {
 	data := make(chan market.GetDepthResponse)
 
 	go mkClient.GetDepthAsync(data, "BTC-USDT", "step0")
+	x, ok := <-data
+	if !ok || x.Status != "ok" {
+		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
+		t.Fail()
+	} else {
+		t.Log(x)
+	}
+}
+
+func TestMarketClient_GetBboAsync(t *testing.T) {
+	data := make(chan market.GetBboResponse)
+
+	go mkClient.GetBboAsync(data, "BTC-USDT")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -170,7 +183,7 @@ func TestMarketClient_GetBatchMergedAsync(t *testing.T) {
 func TestMarketClient_GetTradeAsync(t *testing.T) {
 	data := make(chan market.GetTradeResponse)
 
-	go mkClient.GetTradeAsync(data, "BTC-USDT")
+	go mkClient.GetTradeAsync(data, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)
@@ -424,7 +437,7 @@ func TestMarketClient_GetFundingRateAsync(t *testing.T) {
 func TestMarketClient_GetBatchFundingRateAsync(t *testing.T) {
 	data := make(chan market.GetBatchFundingRateResponse)
 
-	go mkClient.GetBatchFundingRateAsync(data, "BTC-USDT")
+	go mkClient.GetBatchFundingRateAsync(data, "")
 	x, ok := <-data
 	if !ok || x.Status != "ok" {
 		t.Logf("%d:%s", x.ErrorCode, x.ErrorMessage)

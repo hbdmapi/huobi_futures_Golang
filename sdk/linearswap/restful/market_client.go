@@ -142,6 +142,32 @@ func (mc *MarketClient) GetDepthAsync(data chan market.GetDepthResponse, contrac
 	data <- result
 }
 
+func (mc *MarketClient) GetBboAsync(data chan market.GetBboResponse, contractCode string) {
+	// location
+	location := "/linear-swap-ex/market/bbo"
+
+	// option
+	option := ""
+	if contractCode != "" {
+		option += fmt.Sprintf("contract_code=%s", contractCode)
+	}
+	if option != "" {
+		location += fmt.Sprintf("?%s", option)
+	}
+
+	url := mc.PUrlBuilder.Build(location, nil)
+	getResp, getErr := reqbuilder.HttpGet(url)
+	if getErr != nil {
+		log.Error("http get error: %s", getErr)
+	}
+	result := market.GetBboResponse{}
+	jsonErr := json.Unmarshal([]byte(getResp), &result)
+	if jsonErr != nil {
+		log.Error("convert json to GetBboResponse error: %s", getErr)
+	}
+	data <- result
+}
+
 func (mc *MarketClient) GetKLineAsync(data chan market.GetKLineResponse, contractCode string, period string, size int, from int, to int) {
 	// location
 	location := fmt.Sprintf("/linear-swap-ex/market/history/kline?contract_code=%s&period=%s", contractCode, period)
